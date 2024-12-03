@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PipeBending": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
