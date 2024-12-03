@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PipeBendingBLL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+29e60330a64eac7a15c2683987daed4c45b24cc0")]
 [assembly: System.Reflection.AssemblyProductAttribute("PipeBendingBLL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PipeBendingBLL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
