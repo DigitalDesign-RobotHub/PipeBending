@@ -14,9 +14,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DevExpress.Xpf.Grid.TreeList;
 using log4net;
-using PipeBending.ViewModel;
+using PipeBendingUI.ViewModel;
 
-namespace PipeBending.View
+namespace PipeBendingUI.View
 {
     /// <summary>
     /// WorkSpaceTree.xaml 的交互逻辑

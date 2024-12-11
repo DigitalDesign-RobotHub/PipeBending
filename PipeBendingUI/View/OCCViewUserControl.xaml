@@ -1,9 +1,10 @@
 ﻿<UserControl
-    x:Class="PipeBending.View.OCCViewUserControl"
+    x:Class="PipeBendingUI.View.OCCViewUserControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:PipeBending.View"
+    xmlns:local="clr-namespace:PipeBendingUI.View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:Background="LightBlue"
     d:DesignHeight="450"

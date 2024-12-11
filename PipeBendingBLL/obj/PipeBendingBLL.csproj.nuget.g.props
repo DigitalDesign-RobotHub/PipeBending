@@ -14,4 +14,9 @@
     <SourceRoot Include="D:\DevExpress\DevExpress 23.2.3\Components\Offline Packages\" />
     <SourceRoot Include="C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages\" />
   </ItemGroup>
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgDevExpress_Data Condition=" '$(PkgDevExpress_Data)' == '' ">D:\DevExpress\DevExpress 23.2.3\Components\Offline Packages\devexpress.data\23.2.3</PkgDevExpress_Data>
+    <PkgDevExpress_Wpf_Core Condition=" '$(PkgDevExpress_Wpf_Core)' == '' ">D:\DevExpress\DevExpress 23.2.3\Components\Offline Packages\devexpress.wpf.core\23.2.3</PkgDevExpress_Wpf_Core>
+    <PkgDevExpress_Wpf_LayoutControl Condition=" '$(PkgDevExpress_Wpf_LayoutControl)' == '' ">D:\DevExpress\DevExpress 23.2.3\Components\Offline Packages\devexpress.wpf.layoutcontrol\23.2.3</PkgDevExpress_Wpf_LayoutControl>
+  </PropertyGroup>
 </Project>

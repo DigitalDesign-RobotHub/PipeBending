@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PipeBendingDAL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+29e60330a64eac7a15c2683987daed4c45b24cc0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+506fe515fd2cf896184fb452ed15e0e61002a77a")]
 [assembly: System.Reflection.AssemblyProductAttribute("PipeBendingDAL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PipeBendingDAL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

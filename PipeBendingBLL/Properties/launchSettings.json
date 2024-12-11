@@ -1,8 +1,8 @@
 {
   "profiles": {
-    "PipeBending": {
+    "PipeBendingBLL": {
       "commandName": "Project",
-      "nativeDebugging": false
+      "nativeDebugging": true
     }
   }
 }

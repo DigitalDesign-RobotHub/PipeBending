@@ -10,7 +10,7 @@ using OCCTK.OCC.OpenGL;
 using OCCTK.OCC.V3d;
 using OCCTK.Utils;
 
-namespace PipeBending.Singleton;
+namespace PipeBendingUI.Singleton;
 
 /// <summary>
 /// Viewer管理器作为全局单例，负责绘制引擎和上下文的创建和管理

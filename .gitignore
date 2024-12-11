@@ -1,0 +1,35 @@
+# Visual Studio 文件
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+
+# 编译输出
+bin/
+PipeBendingBLL/bin/
+PipeBendingDAL/bin/
+PipeBendingUI/bin/
+PipeBendingUI/Properties/
+x64/
+PipeBendingBLL/x64/
+PipeBendingDAL/x64/
+PipeBendingUI/x64/
+PipeBendingUI/Properties/
+obj/
+PipeBendingBLL/obj/
+PipeBendingDAL/obj/
+PipeBendingUI/obj/
+PipeBendingUI/Properties/
+*.exe
+*.dll
+*.pdb
+*.cache
+
+# 临时文件
+*.tmp
+*.log
+
+# 操作系统文件
+.DS_Store
+Thumbs.db

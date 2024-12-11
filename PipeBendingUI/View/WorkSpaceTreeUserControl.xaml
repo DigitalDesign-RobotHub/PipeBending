@@ -1,13 +1,13 @@
 ﻿<UserControl
-    x:Class="PipeBending.View.WorkSpaceTreeUserControl"
+    x:Class="PipeBendingUI.View.WorkSpaceTreeUserControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
-    xmlns:local="clr-namespace:PipeBending.View"
+    xmlns:local="clr-namespace:PipeBendingUI.View"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewmodel="clr-namespace:PipeBending.ViewModel"
+    xmlns:viewmodel="clr-namespace:PipeBendingUI.ViewModel"
     d:Background="LightGreen"
     d:DesignHeight="450"
     d:DesignWidth="400"
@@ -34,10 +34,12 @@
                 KeyFieldName="ID"
                 NodeCollapsed="TreeViewControl_NodeCollapsed"
                 NodeExpanded="TreeViewControl_NodeExpanded"
-                NodeIndent="9" TreeLineStyle="Solid"
+                NodeIndent="9"
                 ParentFieldName="ParentID"
                 SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
+                Style="{StaticResource CommonTreeViewStyle}"
                 TreeDerivationMode="Selfreference"
+                TreeLineStyle="Solid"
                 TreeViewFieldName="Name" />
         </dx:DXTabItem>
 
@@ -46,7 +48,8 @@
             <dxg:TreeViewControl
                 ItemsSource="{Binding CompactTreeNodes}"
                 NodeIndent="1"
-                SelectedItem="{Binding SelectedNode, Mode=TwoWay}" />
+                SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
+                Style="{StaticResource CommonTreeViewStyle}" />
         </dx:DXTabItem>
     </dx:DXTabControl>
 </UserControl>

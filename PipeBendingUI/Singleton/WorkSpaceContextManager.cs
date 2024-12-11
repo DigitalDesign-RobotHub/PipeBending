@@ -9,9 +9,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using IMKernel.Visualization;
 using log4net;
-using PipeBending.Model;
+using PipeBendingUI.Model;
 
-namespace PipeBending.Singleton;
+namespace PipeBendingUI.Singleton;
 
 public partial class WorkSpaceContextManager : ObservableObject
 {
@@ -21,14 +21,14 @@ public partial class WorkSpaceContextManager : ObservableObject
 
     public IReadOnlyDictionary<DateTime, WorkSpace> HistoricalRecord => _historicalRecord;
 
-    [ObservableProperty]
-    private WorkSpace currentWorkSpace;
-
     public WorkSpaceContextManager()
     {
         CurrentWorkSpace = new WorkSpace();
-        log.Info("WorkSpaceContextManager initialized");
+        log.Info("初始化工作空间管理器");
     }
+
+    [ObservableProperty]
+    private WorkSpace currentWorkSpace;
 
     partial void OnCurrentWorkSpaceChanged(WorkSpace value)
     {
@@ -36,6 +36,11 @@ public partial class WorkSpaceContextManager : ObservableObject
         WeakReferenceMessenger.Default.Send(new WorkSpaceChangedMessage(value));
     }
 
+    /// <summary>
+    /// 加载新的工作空间
+    /// </summary>
+    /// <param name="filePath"></param>
+    /// <returns></returns>
     public async Task LoadNewWorkSpace(string filePath)
     {
         var timestamp = DateTime.Now;
@@ -55,6 +60,11 @@ public partial class WorkSpaceContextManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// 异步的从文件中加载工作空间
+    /// </summary>
+    /// <param name="filePath"></param>
+    /// <returns></returns>
     private async Task<WorkSpace> LoadWorkSpaceFromFileAsync(string filePath)
     {
         try
@@ -73,6 +83,10 @@ public partial class WorkSpaceContextManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// 保存工作空间到历史记录
+    /// </summary>
+    /// <param name="timestamp"></param>
     private void SaveToHistory(DateTime timestamp)
     {
         if (CurrentWorkSpace != null)
@@ -90,6 +104,11 @@ public partial class WorkSpaceContextManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// 还原工作空间
+    /// </summary>
+    /// <param name="timestamp">保存的时间戳</param>
+    /// <returns></returns>
     public bool RestoreWorkSpace(DateTime timestamp)
     {
         try
@@ -111,6 +130,10 @@ public partial class WorkSpaceContextManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// 还原到上一个工作空间
+    /// </summary>
+    /// <returns></returns>
     public bool RestoreToPreviousWorkSpace()
     {
         try
@@ -134,8 +157,14 @@ public partial class WorkSpaceContextManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// 保存工作空间到文件
+    /// </summary>
+    /// <param name="filePath"></param>
+    /// <returns></returns>
     public async Task SaveWorkSpaceToFile(string filePath)
     {
+        //todo 这个功能应该迁移到DAL层
         try
         {
             using var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
@@ -153,11 +182,19 @@ public partial class WorkSpaceContextManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// 获取最近保存的工作空间字典
+    /// </summary>
+    /// <param name="count"></param>
+    /// <returns></returns>
     public IEnumerable<KeyValuePair<DateTime, WorkSpace>> GetRecentWorkSpaces(int count)
     {
         return _historicalRecord.OrderByDescending(x => x.Key).Take(count);
     }
 
+    /// <summary>
+    /// 清空历史记录
+    /// </summary>
     public void ClearHistory()
     {
         _historicalRecord.Clear();

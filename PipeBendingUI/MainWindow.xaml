@@ -1,148 +1,267 @@
 ﻿<dx:ThemedWindow
-    x:Class="PipeBending.MainWindow"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
-    xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
-    xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
-    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
-    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
-    xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
-    xmlns:view="clr-namespace:PipeBending.View"
-    xmlns:viewmodel="clr-namespace:PipeBending.ViewModel"
-    Title="MainWindow"
-    Width="2400"
-    Height="1200"
-    WindowStartupLocation="CenterScreen">
-    <dx:ThemedWindow.DataContext>
-        <viewmodel:RibbonControlViewModel />
-    </dx:ThemedWindow.DataContext>
-    <DockPanel>
-        <dxr:RibbonControl DockPanel.Dock="Top" RibbonStyle="Office2019">
-            <dxr:RibbonControl.ToolbarItems>
-                <dxb:BarButtonItemLink BarItemName="newItem" />
-            </dxr:RibbonControl.ToolbarItems>
-            <dxr:RibbonDefaultPageCategory>
-                <dxr:RibbonPage Caption="Home">
-                    <dxr:RibbonPageGroup Caption="File">
-                        <dxb:BarButtonItem
-                            x:Name="newItem"
-                            Content="New"
-                            Glyph="{dx:DXImage 'SvgImages/Actions/New.svg'}" />
-                        <dxb:BarItemSeparator />
-                        <dxr:BarButtonGroup x:Name="editorGroup">
-                            <dxb:BarEditItem
-                                x:Name="editItem"
-                                EditSettings="{dxe:ComboBoxSettings}"
-                                EditWidth="80" />
-                        </dxr:BarButtonGroup>
-                        <dxr:BarButtonGroup x:Name="alignmentGroup">
-                            <dxb:BarCheckItem
-                                x:Name="leftCheckItem"
-                                Content="Align Left"
-                                Glyph="{dx:DXImage 'SvgImages/Format/AlignLeft.svg'}"
-                                GroupIndex="1"
-                                IsChecked="True" />
-                            <dxb:BarCheckItem
-                                x:Name="rightCheckItem"
-                                Content="Align Right"
-                                Glyph="{dx:DXImage 'SvgImages/Format/AlignRight.svg'}"
-                                GroupIndex="1" />
-                            <dxb:BarCheckItem
-                                x:Name="justifyCheckItem"
-                                Content="Align Justify"
-                                Glyph="{dx:DXImage 'SvgImages/Format/AlignJustify.svg'}"
-                                GroupIndex="1" />
-                        </dxr:BarButtonGroup>
-                        <dxb:BarItemSeparator />
-                        <dxb:BarButtonItem
-                            x:Name="saveAsItem"
-                            Content="Save As"
-                            LargeGlyph="{dx:DXImage 'SvgImages/Save/SaveAs.svg'}" />
-                    </dxr:RibbonPageGroup>
-                </dxr:RibbonPage>
-                <dxr:RibbonPage x:Name="WorkSpace_RibbonPage" Caption="工作空间">
-                    <dxr:RibbonPageGroup x:Name="WorkSpace_Robot_RibbonPageGroup" Caption="机器人">
-                        <dxb:BarButtonItem
-                            x:Name="WorkSpace_Robot_Create"
-                            Command="{Binding CreateNewRobotCommand}"
-                            Content="创建新机器人"
-                            Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_Add.svg}"
-                            Language="zh-chs"
-                            LargeGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_Add.svg}"
-                            MediumGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_Add.svg}"
-                            RibbonStyle="SmallWithText" />
-                        <dxb:BarButtonItem
-                            x:Name="WorkSpace_Robot_Load"
-                            Content="加载新机器人"
-                            Glyph="{dx:DXImage SvgImages/Actions/Open2.svg}"
-                            LargeGlyph="{dx:DXImage SvgImages/Actions/Open2.svg}"
-                            MediumGlyph="{dx:DXImage SvgImages/Actions/Open2.svg}"
-                            RibbonStyle="SmallWithText" />
-                        <dxb:BarButtonItem
-                            x:Name="WorkSpace_Robot_Save"
-                            Content="保存机器人"
-                            Glyph="{dx:DXImage SvgImages/DiagramIcons/save.svg}"
-                            LargeGlyph="{dx:DXImage SvgImages/DiagramIcons/save.svg}"
-                            MediumGlyph="{dx:DXImage SvgImages/DiagramIcons/save.svg}"
-                            RibbonStyle="SmallWithText" />
-                        <dxb:BarItemSeparator />
-                    </dxr:RibbonPageGroup>
-                </dxr:RibbonPage>
-            </dxr:RibbonDefaultPageCategory>
-        </dxr:RibbonControl>
-        <dxr:RibbonStatusBarControl DockPanel.Dock="Bottom">
-            <dxr:RibbonStatusBarControl.RightItems>
-                <dxb:BarButtonItem
-                    x:Name="printItem"
-                    Content="Print"
-                    Glyph="{dx:DXImage 'SvgImages/Print/Print.svg'}" />
-            </dxr:RibbonStatusBarControl.RightItems>
-        </dxr:RibbonStatusBarControl>
-        <dxdo:LayoutGroup Orientation="Horizontal">
-            <!--  左侧属性页  -->
-            <dxdo:LayoutGroup
-                MinWidth="250"
-                Background="LightCyan"
-                DockPanel.Dock="Left"
-                ItemWidth="1*"
-                Orientation="Vertical">
-                <dxdo:LayoutPanel Caption="树结构">
-                    <view:WorkSpaceTreeUserControl />
-                </dxdo:LayoutPanel>
-            </dxdo:LayoutGroup>
-            <!--  中间的主窗口  -->
-            <dxdo:LayoutGroup
-                Caption="LayoutRoot"
-                ItemWidth="5*"
-                Orientation="Vertical">
-                <dxdo:DocumentGroup
-                    x:Name="MainDocumentGroup"
-                    dxdo:DocumentGroup.PinLocation="Near"
-                    ClosePageButtonShowMode="InActiveTabPageHeader"
-                    ItemHeight="5*"
-                    MDIStyle="Tabbed"
-                    ShowCloseButton="True">
-                    <dxdo:DocumentPanel
-                        x:Name="DataRecordDocumentPanel"
-                        dxdo:DocumentGroup.PinLocation="Near"
-                        dxdo:DocumentGroup.ShowPinButton="True"
-                        Caption="三维视图"
-                        ShowCloseButton="False">
-                        <view:OCCViewUserControl />
-                    </dxdo:DocumentPanel>
-                </dxdo:DocumentGroup>
-            </dxdo:LayoutGroup>
-            <!--  右侧属性页  -->
-            <dxdo:LayoutGroup
-                MinWidth="250"
-                DockPanel.Dock="Right"
-                ItemWidth="1*"
-                Orientation="Vertical">
-                <dxdo:LayoutPanel Caption="属性">
-                    <Label Content="1234" />
-                </dxdo:LayoutPanel>
-            </dxdo:LayoutGroup>
+  x:Class="PipeBendingUI.MainWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+  xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+  xmlns:dxdo="http://schemas.devexpress.com/winfx/2008/xaml/docking"
+  xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+  xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+  xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
+  xmlns:view="clr-namespace:PipeBendingUI.View"
+  xmlns:viewmodel="clr-namespace:PipeBendingUI.ViewModel"
+  Title="MainWindow"
+  Width="2400"
+  Height="1200"
+  WindowStartupLocation="CenterScreen">
+  <dx:ThemedWindow.DataContext>
+    <viewmodel:RibbonControlViewModel />
+  </dx:ThemedWindow.DataContext>
+  <dx:ThemedWindow.InputBindings>
+    <!--#region 定义快捷键组合-->
+    <!--  Ctrl+Z  -->
+    <KeyBinding
+      Key="Z"
+      Command="{Binding UndoCommand}"
+      Modifiers="Control" />
+    <!--#endregion-->
+  </dx:ThemedWindow.InputBindings>
+  <DockPanel>
+    <!--  顶部 Ribbon  -->
+    <dxr:RibbonControl DockPanel.Dock="Top" RibbonStyle="Office2019">
+      <dxr:RibbonControl.ToolbarItems>
+        <dxb:BarButtonItemLink BarItemName="newItem" />
+      </dxr:RibbonControl.ToolbarItems>
+      <dxr:RibbonDefaultPageCategory>
+        <!--  主选项卡  -->
+        <dxr:RibbonPage x:Name="MainPage_RibbonPage" Caption="首页">
+          <!--  常用  -->
+          <dxr:RibbonPageGroup x:Name="Common_RibbonPageGroup" Caption="常用">
+            <dxb:BarButtonItem
+              x:Name="newItem"
+              Content="New"
+              Glyph="{dx:DXImage 'SvgImages/Actions/New.svg'}" />
+            <dxb:BarItemSeparator />
+            <dxr:BarButtonGroup x:Name="editorGroup">
+              <dxb:BarEditItem
+                x:Name="editItem"
+                EditSettings="{dxe:ComboBoxSettings}"
+                EditWidth="80" />
+            </dxr:BarButtonGroup>
+            <dxr:BarButtonGroup x:Name="alignmentGroup">
+              <dxb:BarCheckItem
+                x:Name="leftCheckItem"
+                Content="Align Left"
+                Glyph="{dx:DXImage 'SvgImages/Format/AlignLeft.svg'}"
+                GroupIndex="1"
+                IsChecked="True" />
+              <dxb:BarCheckItem
+                x:Name="rightCheckItem"
+                Content="Align Right"
+                Glyph="{dx:DXImage 'SvgImages/Format/AlignRight.svg'}"
+                GroupIndex="1" />
+              <dxb:BarCheckItem
+                x:Name="justifyCheckItem"
+                Content="Align Justify"
+                Glyph="{dx:DXImage 'SvgImages/Format/AlignJustify.svg'}"
+                GroupIndex="1" />
+            </dxr:BarButtonGroup>
+            <dxb:BarItemSeparator />
+            <dxb:BarButtonItem
+              x:Name="MainPage_Common_Undo_Button"
+              Command="{Binding UndoCommand}"
+              Content="Undo"
+              Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_Undo.svg}"
+              LargeGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_Undo.svg}" />
+          </dxr:RibbonPageGroup>
+          <!--  三维操作  -->
+          <dxr:RibbonPageGroup x:Name="MainPage_ThreeDOperation_RibbonPageGroup" Caption="三维操作">
+            <dxr:BarButtonGroup RibbonStyle="SmallWithoutText">
+              <dxb:BarButtonItem
+                x:Name="MainPage_ThreeDOperation_FrontView_Button"
+                Command="{Binding FrontViewCommand}"
+                Content="前"
+                Glyph="{dx:DXImage 'SvgImages/Actions/New.svg'}" />
+              <dxb:BarButtonItem
+                x:Name="MainPage_ThreeDOperation_BackView_Button"
+                Command="{Binding BackViewCommand}"
+                Content="后"
+                Glyph="{dx:DXImage 'SvgImages/Actions/New.svg'}" />
+              <dxb:BarButtonItem
+                x:Name="MainPage_ThreeDOperation_TopView_Button"
+                Command="{Binding TopViewCommand}"
+                Content="上"
+                Glyph="{dx:DXImage 'SvgImages/Actions/New.svg'}" />
+              <dxb:BarButtonItem
+                x:Name="MainPage_ThreeDOperation_BottomView_Button"
+                Command="{Binding BottomViewCommand}"
+                Content="下"
+                Glyph="{dx:DXImage 'SvgImages/Actions/New.svg'}" />
+              <dxb:BarButtonItem
+                x:Name="MainPage_ThreeDOperation_LeftView_Button"
+                Command="{Binding LeftViewCommand}"
+                Content="左"
+                Glyph="{dx:DXImage 'SvgImages/Actions/New.svg'}" />
+              <dxb:BarButtonItem
+                x:Name="MainPage_ThreeDOperation_RightView_Button"
+                Command="{Binding RightViewCommand}"
+                Content="右"
+                Glyph="{dx:DXImage 'SvgImages/Actions/New.svg'}" />
+              <dxb:BarButtonItem
+                x:Name="MainPage_ThreeDOperation_AxoView_Button"
+                Command="{Binding AxoViewCommand}"
+                Content="等轴测"
+                Glyph="{dx:DXImage 'SvgImages/Actions/New.svg'}" />
+            </dxr:BarButtonGroup>
+          </dxr:RibbonPageGroup>
+        </dxr:RibbonPage>
+        <!--  工作空间选项卡  -->
+        <dxr:RibbonPage
+          x:Name="WorkSpace_RibbonPage"
+          Caption="工作空间"
+          IsVisible="{Binding WorkSpace_RibbonPage_Visible}">
+          <dxr:RibbonPageGroup x:Name="WorkSpace_Component_RibbonPageGroup" Caption="部件">
+            <dxb:BarButtonItem
+              x:Name="WorkSpace_Component_Create_Button"
+              Command="{Binding CreateNewComponent}"
+              Content="创建新部件"
+              Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_Add.svg}"
+              Language="zh-chs"
+              LargeGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_Add.svg}"
+              MediumGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_Add.svg}"
+              RibbonStyle="Large" />
+            <!--<dxb:BarItemSeparator />-->
+          </dxr:RibbonPageGroup>
+          <dxr:RibbonPageGroup
+            x:Name="WorkSpace_Robot_RibbonPageGroup"
+            Caption="机器人"
+            IsVisible="{Binding WorkSpace_Robot_RibbonPageGroup_Visible}">
+            <dxb:BarButtonItem
+              x:Name="WorkSpace_Robot_Create_Button"
+              Content="创建新机器人"
+              Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_Add.svg}"
+              Language="zh-chs"
+              LargeGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_Add.svg}"
+              MediumGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_Add.svg}"
+              RibbonStyle="SmallWithText" />
+            <dxb:BarButtonItem
+              x:Name="WorkSpace_Robot_Load_Button"
+              Content="加载新机器人"
+              Glyph="{dx:DXImage SvgImages/Actions/Open2.svg}"
+              LargeGlyph="{dx:DXImage SvgImages/Actions/Open2.svg}"
+              MediumGlyph="{dx:DXImage SvgImages/Actions/Open2.svg}"
+              RibbonStyle="SmallWithText" />
+            <dxb:BarButtonItem
+              x:Name="WorkSpace_Robot_Save_Button"
+              Content="保存机器人"
+              Glyph="{dx:DXImage SvgImages/DiagramIcons/save.svg}"
+              LargeGlyph="{dx:DXImage SvgImages/DiagramIcons/save.svg}"
+              MediumGlyph="{dx:DXImage SvgImages/DiagramIcons/save.svg}"
+              RibbonStyle="SmallWithText" />
+            <dxb:BarItemSeparator />
+          </dxr:RibbonPageGroup>
+        </dxr:RibbonPage>
+        <!--  素材库选项卡  -->
+        <dxr:RibbonPage
+          x:Name="Resources_RibbonPage"
+          Caption="资源库"
+          IsVisible="{Binding Resources_RibbonPage_Visible}">
+          <dxr:RibbonPageGroup x:Name="Resources_StaticResource_RibbonPageGroup" Caption="静态库">
+            <dxb:BarButtonItem
+              x:Name="Resources_StaticResource_ModelLibrary_Button"
+              Content="模型库"
+              Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_Database.svg}"
+              Language="zh-chs"
+              LargeGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_Database.svg}"
+              MediumGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_Database.svg}"
+              RibbonStyle="Large" />
+            <dxb:BarItemSeparator />
+            <dxb:BarButtonItem
+              x:Name="Resources_StaticResource_ComponentLibrary_Button"
+              Content="部件库"
+              Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_Database.svg}"
+              Language="zh-chs"
+              LargeGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_Database.svg}"
+              MediumGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_Database.svg}"
+              RibbonStyle="Large" />
+            <dxb:BarItemSeparator />
+            <dxb:BarButtonItem
+              x:Name="Resources_StaticResource_RobotLibrary_Button"
+              Content="机器人库"
+              Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_Database.svg}"
+              Language="zh-chs"
+              LargeGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_Database.svg}"
+              MediumGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_Database.svg}"
+              RibbonStyle="Large" />
+          </dxr:RibbonPageGroup>
+        </dxr:RibbonPage>
+      </dxr:RibbonDefaultPageCategory>
+    </dxr:RibbonControl>
+    <!--  底部状态栏  -->
+    <dxr:RibbonStatusBarControl DockPanel.Dock="Bottom">
+      <dxr:RibbonStatusBarControl.RightItems>
+        <dxb:BarButtonItem
+          x:Name="printItem"
+          Content="Print"
+          Glyph="{dx:DXImage 'SvgImages/Print/Print.svg'}" />
+      </dxr:RibbonStatusBarControl.RightItems>
+    </dxr:RibbonStatusBarControl>
+    <!--  中间主窗口  -->
+    <dxdo:DockLayoutManager FloatingMode="Desktop">
+      <dxdo:LayoutGroup Orientation="Horizontal">
+        <!--  左侧属性页  -->
+        <dxdo:LayoutGroup
+          MinWidth="250"
+          Background="LightCyan"
+          DockPanel.Dock="Left"
+          ItemWidth="1*"
+          Orientation="Vertical">
+          <dxdo:LayoutPanel AllowClose="False" Caption="树结构">
+            <view:WorkSpaceTreeUserControl />
+          </dxdo:LayoutPanel>
         </dxdo:LayoutGroup>
-    </DockPanel>
+        <!--  中间的主窗口  -->
+        <dxdo:LayoutGroup
+          Caption="LayoutRoot"
+          ItemWidth="5*"
+          Orientation="Vertical">
+          <dxdo:DocumentGroup
+            x:Name="Main_DocumentGroup"
+            dxdo:DocumentGroup.PinLocation="Near"
+            ClosePageButtonShowMode="InActiveTabPageHeader"
+            ItemHeight="5*"
+            MDIStyle="Tabbed"
+            ShowCloseButton="True">
+            <dxdo:DocumentPanel
+              x:Name="DataRecordDocumentPanel"
+              dxdo:DocumentGroup.PinLocation="Near"
+              dxdo:DocumentGroup.ShowPinButton="True"
+              Caption="三维视图"
+              ShowCloseButton="False">
+              <view:OCCViewUserControl />
+            </dxdo:DocumentPanel>
+          </dxdo:DocumentGroup>
+        </dxdo:LayoutGroup>
+        <!--  右侧属性页  -->
+        <dxdo:LayoutGroup
+          MinWidth="250"
+          DockPanel.Dock="Right"
+          ItemWidth="1*"
+          Orientation="Vertical">
+          <dxdo:LayoutPanel
+            x:Name="MainWindow_Properties_LayoutPanel"
+            AllowClose="False"
+            Caption="属性">
+            <Grid x:Name="MainWindow_Properties_Grid">
+              <Label
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="属性栏"
+                FontSize="40" />
+            </Grid>
+          </dxdo:LayoutPanel>
+        </dxdo:LayoutGroup>
+      </dxdo:LayoutGroup>
+    </dxdo:DockLayoutManager>
+  </DockPanel>
 </dx:ThemedWindow>

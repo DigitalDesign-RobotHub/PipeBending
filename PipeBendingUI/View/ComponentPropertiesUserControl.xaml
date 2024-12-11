@@ -1,0 +1,60 @@
+﻿<UserControl
+    x:Class="PipeBendingUI.View.ComponentProperties"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:kernelview="clr-namespace:IMKernel.View;assembly=IMKernel"
+    xmlns:local="clr-namespace:PipeBendingUI.View"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:model="clr-namespace:PipeBendingUI.ViewModel"
+    d:Background="LightBlue"
+    d:DesignHeight="900"
+    d:DesignWidth="500"
+    FontSize="20"
+    mc:Ignorable="d">
+    <UserControl.DataContext>
+        <model:ComponentPropertiesViewModel />
+    </UserControl.DataContext>
+    <dxlc:LayoutControl>
+        <dxlc:LayoutGroup HorizontalAlignment="Stretch" Orientation="Vertical">
+            <!--  name  -->
+            <dxlc:LayoutItem Label="名称: ">
+                <dxe:TextEdit HorizontalContentAlignment="Center" Text="{Binding Component.Name, FallbackValue='ErrorName', TargetNullValue='TestName'}" />
+            </dxlc:LayoutItem>
+            <!--  base  -->
+            <dxlc:LayoutGroup Orientation="Vertical">
+                <dxlc:LayoutItem HorizontalAlignment="Center" Label="基准坐标" />
+                <dxlc:LayoutItem Margin="1,0,1,0">
+                    <kernelview:TrsfView DataContext="{Binding TheTrsfViewModel}" />
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+            <!--  dof  -->
+            <dxlc:LayoutItem Label="DOF: ">
+                <dxe:TextEdit HorizontalContentAlignment="Center" Text="{Binding Component.DOF, FallbackValue='ErrorDOF', TargetNullValue=''}" />
+            </dxlc:LayoutItem>
+            <!--  shape  -->
+            <dxlc:LayoutItem Label="Shape: ">
+                <dxe:TextEdit HorizontalContentAlignment="Center" Text="{Binding Component.Shape, FallbackValue='ErrorShape', TargetNullValue='Null'}" />
+            </dxlc:LayoutItem>
+            <!--  parent  -->
+            <dxlc:LayoutItem Label="父部件: ">
+                <dxe:ComboBoxEdit ItemsSource="{Binding Components}" SelectedItem="{Binding SelectedParentComponent}" />
+            </dxlc:LayoutItem>
+            <!--  buttons  -->
+            <dxlc:LayoutGroup Orientation="Horizontal">
+                <dxlc:LayoutItem Visibility="{Binding CreateComponentState}">
+                    <dx:SimpleButton Command="{Binding CreateComponentCommand}" Content="创建" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem Visibility="{Binding SaveComponentState}">
+                    <dx:SimpleButton Command="{Binding SaveComponentCommand}" Content="保存" />
+                </dxlc:LayoutItem>
+                <dxlc:LayoutItem>
+                    <dx:SimpleButton Command="{Binding CancerComponentCommand}" Content="取消" />
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutGroup>
+    </dxlc:LayoutControl>
+</UserControl>

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PipeBending.Properties {
+namespace PipeBendingUI.Properties {
 
 
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

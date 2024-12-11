@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "TLgSpMiopRw=",
+  "dgSpecHash": "OAuVkfS7JvQ=",
   "success": true,
   "projectFilePath": "D:\\ICO\\InsofRobot\\PipeBending\\PipeBendingDAL\\PipeBendingDAL.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\ShuShe-426\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.17763.53\\microsoft.windows.sdk.net.ref.10.0.17763.53.nupkg.sha512"
+  ],
   "logs": []
 }

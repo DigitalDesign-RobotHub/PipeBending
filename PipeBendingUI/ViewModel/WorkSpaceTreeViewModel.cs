@@ -10,9 +10,9 @@ using CommunityToolkit.Mvvm.Messaging;
 using DevExpress.Map.Kml.Model;
 using IMKernel.Robotics;
 using log4net;
-using PipeBending.Model;
+using PipeBendingUI.Model;
 
-namespace PipeBending.ViewModel;
+namespace PipeBendingUI.ViewModel;
 
 /// <summary>
 /// 工作空间树形结构元素
@@ -79,6 +79,11 @@ public partial class WorkSpaceTreeViewModel : ObservableObject
     [ObservableProperty]
     private WorkSpace currentWorkSpace;
 
+    partial void OnCurrentWorkSpaceChanged(WorkSpace value)
+    {
+        UpdateTreeStructures();
+    }
+
     /// <summary>
     /// 默认树形结构
     /// </summary>
@@ -127,11 +132,6 @@ public partial class WorkSpaceTreeViewModel : ObservableObject
         {
             Node = node;
         }
-    }
-
-    partial void OnCurrentWorkSpaceChanged(WorkSpace value)
-    {
-        UpdateTreeStructures();
     }
 
     public WorkSpaceTreeViewModel()

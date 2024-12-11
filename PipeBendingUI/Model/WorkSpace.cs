@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using IMKernel.Robotics;
 
-namespace PipeBending.Model;
+namespace PipeBendingUI.Model;
 
 public enum WorkSpaceElementType
 {
