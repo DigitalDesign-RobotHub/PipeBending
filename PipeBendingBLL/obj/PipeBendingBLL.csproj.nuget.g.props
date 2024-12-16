@@ -18,5 +18,7 @@
     <PkgDevExpress_Data Condition=" '$(PkgDevExpress_Data)' == '' ">D:\DevExpress\DevExpress 23.2.3\Components\Offline Packages\devexpress.data\23.2.3</PkgDevExpress_Data>
     <PkgDevExpress_Wpf_Core Condition=" '$(PkgDevExpress_Wpf_Core)' == '' ">D:\DevExpress\DevExpress 23.2.3\Components\Offline Packages\devexpress.wpf.core\23.2.3</PkgDevExpress_Wpf_Core>
     <PkgDevExpress_Wpf_LayoutControl Condition=" '$(PkgDevExpress_Wpf_LayoutControl)' == '' ">D:\DevExpress\DevExpress 23.2.3\Components\Offline Packages\devexpress.wpf.layoutcontrol\23.2.3</PkgDevExpress_Wpf_LayoutControl>
+    <PkgDevExpress_Wpf_Controls Condition=" '$(PkgDevExpress_Wpf_Controls)' == '' ">D:\DevExpress\DevExpress 23.2.3\Components\Offline Packages\devexpress.wpf.controls\23.2.3</PkgDevExpress_Wpf_Controls>
+    <PkgDevExpress_Wpf_Accordion Condition=" '$(PkgDevExpress_Wpf_Accordion)' == '' ">D:\DevExpress\DevExpress 23.2.3\Components\Offline Packages\devexpress.wpf.accordion\23.2.3</PkgDevExpress_Wpf_Accordion>
   </PropertyGroup>
 </Project>

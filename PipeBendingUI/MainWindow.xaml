@@ -125,7 +125,7 @@
           <dxr:RibbonPageGroup x:Name="WorkSpace_Component_RibbonPageGroup" Caption="部件">
             <dxb:BarButtonItem
               x:Name="WorkSpace_Component_Create_Button"
-              Command="{Binding CreateNewComponent}"
+              Command="{Binding CreateNewComponentCommand}"
               Content="创建新部件"
               Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_Add.svg}"
               Language="zh-chs"

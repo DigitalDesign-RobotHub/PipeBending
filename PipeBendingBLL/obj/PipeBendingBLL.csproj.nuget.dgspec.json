@@ -137,6 +137,10 @@
               "target": "Package",
               "version": "[0.6.0, )"
             },
+            "devexpress.wpf.accordion": {
+              "target": "Package",
+              "version": "[23.2.3, )"
+            },
             "devexpress.wpf.layoutcontrol": {
               "target": "Package",
               "version": "[23.2.3, )"

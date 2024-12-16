@@ -1,18 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using DevExpress.Dialogs.Core.ViewModel;
-using DevExpress.Xpf.Editors.Helpers;
-using IMKernel.Interfaces;
-using IMKernel.Kinematic;
 using IMKernel.Model;
-using IMKernel.Robotics;
+using IMKernel.Utils;
 using IMKernel.ViewModel;
-using OCCTK.Extension;
-using OCCTK.OCC.gp;
 using PipeBendingUI.Command;
 using PipeBendingUI.Message;
 
@@ -36,6 +29,9 @@ public partial class ComponentPropertiesViewModel
 
     [ObservableProperty]
     private Component selectedParentComponent;
+
+    [ObservableProperty]
+    private MovementFormula movement;
 
     partial void OnSelectedParentComponentChanged(Component value)
     {

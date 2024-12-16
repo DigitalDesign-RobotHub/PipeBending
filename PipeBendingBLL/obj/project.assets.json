@@ -143,6 +143,46 @@
           }
         }
       },
+      "DevExpress.Wpf.Accordion/23.2.3": {
+        "type": "package",
+        "dependencies": {
+          "DevExpress.Data": "[23.2.3]",
+          "DevExpress.Data.Desktop": "[23.2.3]",
+          "DevExpress.Mvvm": "[23.2.3]",
+          "DevExpress.Wpf.Controls": "[23.2.3]",
+          "DevExpress.Wpf.Core": "[23.2.3]"
+        },
+        "compile": {
+          "lib/net6.0-windows/DevExpress.Xpf.Accordion.v23.2.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0-windows/DevExpress.Xpf.Accordion.v23.2.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "DevExpress.Wpf.Controls/23.2.3": {
+        "type": "package",
+        "dependencies": {
+          "DevExpress.Data": "[23.2.3]",
+          "DevExpress.Data.Desktop": "[23.2.3]",
+          "DevExpress.Mvvm": "[23.2.3]",
+          "DevExpress.Printing.Core": "[23.2.3]",
+          "DevExpress.Wpf.Core": "[23.2.3]"
+        },
+        "compile": {
+          "lib/net6.0-windows/DevExpress.Xpf.Controls.v23.2.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0-windows/DevExpress.Xpf.Controls.v23.2.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "DevExpress.Wpf.Core/23.2.3": {
         "type": "package",
         "dependencies": {
@@ -642,6 +682,7 @@
           "CommunityToolkit.Mvvm": "8.3.2",
           "MathNet.Numerics": "5.0.0",
           "MathNet.Spatial": "0.6.0",
+          "devexpress.wpf.accordion": "23.2.3",
           "devexpress.wpf.layoutcontrol": "23.2.3",
           "log4net": "3.0.3"
         },
@@ -816,6 +857,46 @@
         "lib/net452/DevExpress.Printing.v23.2.Core.xml",
         "lib/net6.0/DevExpress.Printing.v23.2.Core.dll",
         "lib/net6.0/DevExpress.Printing.v23.2.Core.xml"
+      ]
+    },
+    "DevExpress.Wpf.Accordion/23.2.3": {
+      "sha512": "1NQ2vmDXqI579uU63guFzaoSxdMhnDaBzXBFvXQoKRGl4e60TIZMKNDswmL9Mh8NDicOV76aeDFu5UxjkdDAQQ==",
+      "type": "package",
+      "path": "devexpress.wpf.accordion/23.2.3",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "devexpress.wpf.accordion.23.2.3.nupkg.sha512",
+        "devexpress.wpf.accordion.nuspec",
+        "lib/net452/Design/DevExpress.Xpf.Accordion.v23.2.Design.dll",
+        "lib/net452/Design/DevExpress.Xpf.Accordion.v23.2.DesignTools.dll",
+        "lib/net452/DevExpress.Xpf.Accordion.v23.2.dll",
+        "lib/net452/DevExpress.Xpf.Accordion.v23.2.xml",
+        "lib/net6.0-windows/Design/DevExpress.Xpf.Accordion.v23.2.DesignTools.dll",
+        "lib/net6.0-windows/DevExpress.Xpf.Accordion.v23.2.dll",
+        "lib/net6.0-windows/DevExpress.Xpf.Accordion.v23.2.xml",
+        "tools/VisualStudioToolsManifest.xml"
+      ]
+    },
+    "DevExpress.Wpf.Controls/23.2.3": {
+      "sha512": "FZSPQ+Gqftfmv9dbFjuIJ4IKleJl+9pqLZh4ARnXk/J7iwLdEagXKuFqknQFQ5hRPeF2fBXyIlBjOX9NMc/4Hw==",
+      "type": "package",
+      "path": "devexpress.wpf.controls/23.2.3",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "devexpress.wpf.controls.23.2.3.nupkg.sha512",
+        "devexpress.wpf.controls.nuspec",
+        "lib/net452/Design/DevExpress.Xpf.Controls.v23.2.Design.dll",
+        "lib/net452/Design/DevExpress.Xpf.Controls.v23.2.DesignTools.dll",
+        "lib/net452/DevExpress.Xpf.Controls.v23.2.dll",
+        "lib/net452/DevExpress.Xpf.Controls.v23.2.xml",
+        "lib/net6.0-windows/Design/DevExpress.Xpf.Controls.v23.2.DesignTools.dll",
+        "lib/net6.0-windows/DevExpress.Xpf.Controls.v23.2.dll",
+        "lib/net6.0-windows/DevExpress.Xpf.Controls.v23.2.xml",
+        "tools/VisualStudioToolsManifest.xml"
       ]
     },
     "DevExpress.Wpf.Core/23.2.3": {

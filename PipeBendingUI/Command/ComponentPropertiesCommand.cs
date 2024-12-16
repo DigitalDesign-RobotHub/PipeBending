@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using DevExpress.CodeParser;
 using DevExpress.Utils.Extensions;
 using IMKernel.Interfaces;
 using IMKernel.Model;
@@ -12,11 +13,13 @@ using log4net;
 
 namespace PipeBendingUI.Command;
 
+#region 抽象类
+
 public abstract class ComponentPropertiesCommand : ICommand
 {
     private static readonly ILog log = LogManager.GetLogger(typeof(ComponentPropertiesCommand));
 
-    public abstract string Description { get; protected set; }
+    public abstract string Description { get; }
 
     public event EventHandler? CanExecuteChanged;
 
@@ -25,28 +28,37 @@ public abstract class ComponentPropertiesCommand : ICommand
     public abstract void Execute(object? parameter);
 }
 
-public abstract class ComponentPropertiesUndoCommand : ComponentPropertiesCommand, IUndoCommand
+public abstract class ComponentPropertiesUndoCommand : IUndoCommand
 {
     private static readonly ILog log = LogManager.GetLogger(typeof(ComponentPropertiesUndoCommand));
+    public abstract string Description { get; }
+
+    public event EventHandler? CanExecuteChanged;
+
+    public abstract bool CanExecute(object? parameter);
+
+    public abstract void Execute(object? parameter);
 
     public abstract void Undo();
 }
 
-public class CreateComponentCommand : IUndoCommand
+#endregion
+
+/// <summary>
+/// 新建部件
+/// </summary>
+public class CreateComponentCommand : ComponentPropertiesUndoCommand
 {
     private static ObservableCollection<Component> Components =>
         App.Current.StaticResourceManager.Components;
-    public string Description => "创建新部件";
+    public override string Description => "创建新部件";
 
-    public event EventHandler? CanExecuteChanged;
-
-    public bool CanExecute(object? parameter)
+    public override bool CanExecute(object? parameter)
     {
-        //todo 输入检查
-        throw new NotImplementedException();
+        return true;
     }
 
-    public void Execute(object? parameter = null)
+    public override void Execute(object? parameter = null)
     {
         if (parameter is Component com)
         {
@@ -54,7 +66,7 @@ public class CreateComponentCommand : IUndoCommand
         }
     }
 
-    public void Undo()
+    public override void Undo()
     {
         if (Components.Count <= 0)
         {
@@ -64,21 +76,19 @@ public class CreateComponentCommand : IUndoCommand
     }
 }
 
-public class SaveComponentCommand : IUndoCommand
+public class SaveComponentCommand : ComponentPropertiesUndoCommand
 {
-    public string Description => "保存部件";
+    public override string Description => "保存部件";
 
-    public event EventHandler? CanExecuteChanged;
     private static ObservableCollection<Component> Components =>
         App.Current.StaticResourceManager.Components;
 
-    public bool CanExecute(object? parameter)
+    public override bool CanExecute(object? parameter)
     {
-        //todo 输入检查
         throw new NotImplementedException();
     }
 
-    public void Execute(object? parameter = null)
+    public override void Execute(object? parameter = null)
     {
         //todo 保存的逻辑
         throw new NotImplementedException();
@@ -87,7 +97,7 @@ public class SaveComponentCommand : IUndoCommand
     private Component lastComponent;
     private Component newComponent;
 
-    public void Undo()
+    public override void Undo()
     {
         if (!Components.Contains(newComponent))
         {
