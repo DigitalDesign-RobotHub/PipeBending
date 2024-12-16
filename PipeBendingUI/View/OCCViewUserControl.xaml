@@ -1,14 +1,97 @@
 ﻿<UserControl
-    x:Class="PipeBendingUI.View.OCCViewUserControl"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:PipeBendingUI.View"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:Background="LightBlue"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    mc:Ignorable="d">
+  x:Class="PipeBendingUI.View.OCCViewUserControl"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+  xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+  xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+  xmlns:hover="clr-namespace:IMKernel.View;assembly=IMKernel"
+  xmlns:local="clr-namespace:PipeBendingUI.View"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:viewmodel="clr-namespace:PipeBendingUI.ViewModel"
+  d:Background="LightBlue"
+  d:DesignHeight="450"
+  d:DesignWidth="800"
+  mc:Ignorable="d">
+  <UserControl.Resources>
+    <Style x:Key="PopupButtonStyle" TargetType="dx:SimpleButton">
+      <Setter Property="Width" Value="50" />
+      <Setter Property="Height" Value="50" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderBrush" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="2" />
+      <Setter Property="CornerRadius" Value="5" />
+      <Setter Property="GlyphHeight" Value="40" />
+      <Setter Property="GlyphWidth" Value="40" />
+    </Style>
+  </UserControl.Resources>
+  <UserControl.DataContext>
+    <viewmodel:OCCViewViewModel />
+  </UserControl.DataContext>
+  <Grid x:Name="Test_Grid">
     <WindowsFormsHost x:Name="OCCCanvas_WindowsFormsHost" />
+    <hover:AirspacePopup
+      x:Name="Test_AirspacePopup"
+      MaxWidth="{Binding PopupWidth}"
+      MaxHeight="{Binding PopupHeight}"
+      AllowOutsideScreenPlacement="True"
+      AllowsTransparency="True"
+      FollowPlacementTarget="True"
+      HorizontalOffset="{Binding PopupHorizontalOffset}"
+      IsOpen="True"
+      ParentWindow="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+      Placement="Center"
+      PlacementTarget="{Binding ElementName=OCCCanvas_WindowsFormsHost}"
+      VerticalOffset="{Binding PopupVerticalOffset}">
+      <!--  悬浮菜单  -->
+      <dxlc:LayoutControl Background="#9966ccff">
+        <dxlc:LayoutGroup HorizontalAlignment="Left">
+          <dxlc:LayoutItem>
+            <dx:SimpleButton
+              Command="{Binding FrontViewCommand}"
+              Glyph="{StaticResource ResourceKey=View_Front_Icon}"
+              Style="{StaticResource PopupButtonStyle}" />
+          </dxlc:LayoutItem>
+          <dxlc:LayoutItem>
+            <dx:SimpleButton
+              Command="{Binding BackViewCommand}"
+              Glyph="{StaticResource ResourceKey=View_Back_Icon}"
+              Style="{StaticResource PopupButtonStyle}" />
+          </dxlc:LayoutItem>
+          <dxlc:LayoutItem>
+            <dx:SimpleButton
+              Command="{Binding TopViewCommand}"
+              Glyph="{StaticResource ResourceKey=View_Top_Icon}"
+              Style="{StaticResource PopupButtonStyle}" />
+          </dxlc:LayoutItem>
+          <dxlc:LayoutItem>
+            <dx:SimpleButton
+              Command="{Binding BottomViewCommand}"
+              Glyph="{StaticResource ResourceKey=View_Bottom_Icon}"
+              Style="{StaticResource PopupButtonStyle}" />
+          </dxlc:LayoutItem>
+          <dxlc:LayoutItem>
+            <dx:SimpleButton
+              Command="{Binding LeftViewCommand}"
+              Glyph="{StaticResource ResourceKey=View_Left_Icon}"
+              Style="{StaticResource PopupButtonStyle}" />
+          </dxlc:LayoutItem>
+          <dxlc:LayoutItem>
+            <dx:SimpleButton
+              Command="{Binding RightViewCommand}"
+              Glyph="{StaticResource ResourceKey=View_Right_Icon}"
+              Style="{StaticResource PopupButtonStyle}" />
+          </dxlc:LayoutItem>
+          <dxlc:LayoutItem>
+            <dx:SimpleButton
+              Command="{Binding AxoViewCommand}"
+              Glyph="{StaticResource ResourceKey=View_Axo_Icon}"
+              Style="{StaticResource PopupButtonStyle}" />
+          </dxlc:LayoutItem>
+        </dxlc:LayoutGroup>
+      </dxlc:LayoutControl>
+    </hover:AirspacePopup>
+  </Grid>
 </UserControl>

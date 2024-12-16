@@ -1,9 +1,13 @@
-﻿using System.Windows;
+﻿using System;
+using System.Diagnostics;
+using System.Globalization;
+using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
+using System.Windows.Media;
 using IMKernel.Visualization;
 using OCCTK.OCC.AIS;
-using PipeBendingUI.Command;
 using PipeBendingUI.ViewModel;
 using occView = OCCTK.OCC.V3d.View;
 
@@ -39,6 +43,13 @@ public partial class OCCViewUserControl : UserControl, IAISSelectionHandler
         OCCCanvas_WindowsFormsHost.Child = theOCCCanvas;
         //注册鼠标事件
         theOCCCanvas.OnAISSelectionEvent += OnAISSelection;
+        // 注册 SizeChanged 事件
+        this.SizeChanged += (s, e) =>
+        {
+            _Model.Width = this.ActualWidth;
+            _Model.Height = this.ActualHeight;
+        };
+        DataContext = _Model;
     }
 
     public void OnAISSelection(AShape theAIS) { }

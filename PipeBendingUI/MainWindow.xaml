@@ -29,9 +29,11 @@
   <DockPanel>
     <!--  顶部 Ribbon  -->
     <dxr:RibbonControl DockPanel.Dock="Top" RibbonStyle="Office2019">
+      <!--快捷按钮栏-->
       <dxr:RibbonControl.ToolbarItems>
         <dxb:BarButtonItemLink BarItemName="newItem" />
       </dxr:RibbonControl.ToolbarItems>
+      <!--Ribbon-->
       <dxr:RibbonDefaultPageCategory>
         <!--  主选项卡  -->
         <dxr:RibbonPage x:Name="MainPage_RibbonPage" Caption="首页">
