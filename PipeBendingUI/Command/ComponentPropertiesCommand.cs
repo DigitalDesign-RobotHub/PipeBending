@@ -4,12 +4,17 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using DevExpress.CodeParser;
 using DevExpress.Utils.Extensions;
 using IMKernel.Interfaces;
 using IMKernel.Model;
 using log4net;
+using PipeBendingUI.Message;
+using PipeBendingUI.Singleton;
+using PipeBendingUI.ViewModel;
 
 namespace PipeBendingUI.Command;
 
@@ -49,20 +54,41 @@ public abstract class ComponentPropertiesUndoCommand : IUndoCommand
 /// </summary>
 public class CreateComponentCommand : ComponentPropertiesUndoCommand
 {
+    //private readonly WorkSpaceContextManager _workSpaceContextManager;
+
+    //public CreateComponentCommand(
+    //    ObservableCollection<Component> components,
+    //    WorkSpaceContextManager workSpaceContextManager
+    //) {
+    //_workSpaceContextManager = workSpaceContextManager;
+    //}
     private static ObservableCollection<Component> Components =>
         App.Current.StaticResourceManager.Components;
     public override string Description => "创建新部件";
 
     public override bool CanExecute(object? parameter)
     {
-        return true;
+        if (
+            parameter is FrameworkElement element
+            && element.DataContext is ComponentPropertiesViewModel viewModel
+        )
+        {
+            return viewModel.IsComponentValid;
+        }
+        return false;
     }
 
     public override void Execute(object? parameter = null)
     {
-        if (parameter is Component com)
+        if (parameter is (Component com, bool isAddToWorkSpace))
         {
             Components.Add(com);
+            //todo TEST
+            if (isAddToWorkSpace)
+            {
+                App.Current.WorkSpaceContextManager.CurrentWorkSpace.Components.Add(new(com));
+            }
+            WeakReferenceMessenger.Default.Send(new PropertiesUIFinishedMessage());
         }
     }
 
@@ -85,13 +111,14 @@ public class SaveComponentCommand : ComponentPropertiesUndoCommand
 
     public override bool CanExecute(object? parameter)
     {
-        throw new NotImplementedException();
+        return true;
     }
 
     public override void Execute(object? parameter = null)
     {
         //todo 保存的逻辑
         throw new NotImplementedException();
+        WeakReferenceMessenger.Default.Send(new PropertiesUIFinishedMessage());
     }
 
     private Component lastComponent;
@@ -112,24 +139,17 @@ public class SaveComponentCommand : ComponentPropertiesUndoCommand
     }
 }
 
-//public class CancerComponentCommand : IUndoCommand
+//public class CancerComponentCommand : ComponentPropertiesCommand
 //{
-//    public string Description => throw new NotImplementedException();
+//    public override string Description => "部件属性-取消";
 
-//    public event EventHandler? CanExecuteChanged;
-
-//    public bool CanExecute(object? parameter)
+//    public override bool CanExecute(object? parameter)
 //    {
-//        throw new NotImplementedException();
+//        return true;
 //    }
 
-//    public void Execute(object? parameter = null)
+//    public override void Execute(object? parameter)
 //    {
-//        throw new NotImplementedException();
-//    }
-
-//    public void Undo()
-//    {
-//        throw new NotImplementedException();
+//        WeakReferenceMessenger.Default.Send(new PropertiesUIFinishedMessage());
 //    }
 //}

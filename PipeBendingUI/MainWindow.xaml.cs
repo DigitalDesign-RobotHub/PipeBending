@@ -17,6 +17,7 @@ public partial class MainWindow : ThemedWindow
     public MainWindow()
     {
         InitializeComponent();
+
         #region Message
         //创建Component窗口
         WeakReferenceMessenger.Default.Register<ComponentChangedMessage>(
@@ -44,18 +45,26 @@ public partial class MainWindow : ThemedWindow
             }
         );
         #endregion
+
         var ribbonControl = this.FindName("RibbonControl") as RibbonControl;
     }
 
+    /// <summary>
+    /// 创建新部件
+    /// </summary>
+    /// <param name="component"></param>
     private void CreateComponentUI(Component component)
     {
-        if (MainWindow_Properties_Grid.Children.Count != 0)
+        if (MainWindow_Properties_Grid.Children.Count == 0)
         {
-            if (MainWindow_Properties_Grid.Children[0] is ComponentProperties)
-            {
-                return;
-            }
+            return;
         }
+
+        if (MainWindow_Properties_Grid.Children[0] is ComponentProperties)
+        {
+            return;
+        }
+
         MainWindow_Properties_Grid.Children.Clear();
         var componentUI = new ComponentProperties();
         var viewModel = new ComponentPropertiesViewModel();

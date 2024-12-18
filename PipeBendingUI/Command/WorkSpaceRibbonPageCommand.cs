@@ -11,6 +11,8 @@ using PipeBendingUI.Message;
 
 namespace PipeBendingUI.Command;
 
+#region 抽象类
+
 public abstract class WorkSpaceRibbonPageCommand : ICommand
 {
     private static readonly ILog log = LogManager.GetLogger(typeof(WorkSpaceRibbonPageCommand));
@@ -30,6 +32,8 @@ public abstract class WorkSpaceRibbonPageUndoCommand : WorkSpaceRibbonPageComman
 
     public abstract void Undo();
 }
+
+#endregion
 
 public partial class CreateNewComponent : WorkSpaceRibbonPageCommand
 {

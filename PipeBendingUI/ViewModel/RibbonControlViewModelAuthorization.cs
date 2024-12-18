@@ -7,7 +7,7 @@ partial class RibbonControlViewModel
     #region Authorization
     private void VisibilityControl()
     {
-        //获取当前权限
+        //todo 获取当前权限
     }
 
     public bool WorkSpace_RibbonPage_Visible =>

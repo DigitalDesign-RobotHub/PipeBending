@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using IMKernel.Model;
 using IMKernel.Robotics;
+using log4net;
 
 namespace PipeBendingUI.Model;
 
 public enum WorkSpaceElementType
 {
     None = -1,
+    Group = 0,
     Component,
     Robot,
     Interference
@@ -39,11 +44,15 @@ public class RobotElement : WorkSpaceElement
 
 public class ComponentElement : WorkSpaceElement
 {
-    public ComponentElement()
+    public ComponentElement(Component component)
         : base()
     {
         Type = WorkSpaceElementType.Component;
+        Name = component.Name;
+        Component = component;
     }
+
+    Component Component { get; }
 }
 
 public class InterferencesElement : WorkSpaceElement
@@ -55,11 +64,29 @@ public class InterferencesElement : WorkSpaceElement
     }
 }
 
-// 用于MVVM消息通信的消息类
+#region Message
 public record WorkSpaceChangedMessage(WorkSpace NewWorkSpace);
+#endregion
 
 public partial class WorkSpace : ObservableObject, ICloneable
 {
+    private static readonly ILog log = LogManager.GetLogger(typeof(WorkSpace));
+
+    public WorkSpace()
+    {
+        // 订阅集合的变化事件
+        Components.CollectionChanged += OnCollectionChanged;
+        Robots.CollectionChanged += OnCollectionChanged;
+        Interferences.CollectionChanged += OnCollectionChanged;
+    }
+
+    private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        // 发送 WorkSpaceChangedMessage 消息
+        WeakReferenceMessenger.Default.Send(new WorkSpaceChangedMessage(this));
+        log.Info("更新工作空间");
+    }
+
     public ObservableCollection<ComponentElement> Components { get; set; } = [];
 
     public ObservableCollection<RobotElement> Robots { get; set; } = [];
@@ -68,6 +95,11 @@ public partial class WorkSpace : ObservableObject, ICloneable
 
     public object Clone()
     {
-        return new();
+        return new WorkSpace()
+        {
+            Components = this.Components,
+            Robots = this.Robots,
+            Interferences = this.Interferences
+        };
     }
 }

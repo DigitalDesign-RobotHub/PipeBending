@@ -8,6 +8,7 @@ using System.Windows.Documents;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using DevExpress.Map.Kml.Model;
+using DevExpress.Xpf.Reports.UserDesigner.ChartDesigner.Native;
 using IMKernel.Robotics;
 using log4net;
 using PipeBendingUI.Model;
@@ -19,50 +20,23 @@ namespace PipeBendingUI.ViewModel;
 /// </summary>
 public partial class WorkSpaceTreeElement : ObservableObject
 {
-    /// <summary>
-    /// 元素名称
-    /// </summary>
     [ObservableProperty]
     private string name = "";
 
-    /// <summary>
-    /// 元素类型
-    /// </summary>
     [ObservableProperty]
     private WorkSpaceElementType type = WorkSpaceElementType.None;
 
-    /// <summary>
-    /// 父节点ID
-    /// </summary>
     [ObservableProperty]
     private int parentID;
 
-    /// <summary>
-    /// ID
-    /// </summary>
     public int ID => GetHashCode();
 
-    /// <summary>
-    /// 子节点集合
-    /// </summary>
-    [ObservableProperty]
-    private ObservableCollection<WorkSpaceTreeElement> children = new();
-
-    /// <summary>
-    /// 是否展开
-    /// </summary>
     [ObservableProperty]
     private bool isExpanded;
 
-    /// <summary>
-    /// 是否选中
-    /// </summary>
     [ObservableProperty]
     private bool isSelected;
 
-    /// <summary>
-    /// 关联的数据对象
-    /// </summary>
     public object? DataContext { get; set; }
 }
 
@@ -73,15 +47,27 @@ public partial class WorkSpaceTreeViewModel : ObservableObject
 {
     private static readonly ILog log = LogManager.GetLogger(typeof(WorkSpaceTreeViewModel));
 
-    /// <summary>
-    /// 当前工作空间
-    /// </summary>
-    [ObservableProperty]
-    private WorkSpace currentWorkSpace;
+    private static WorkSpace CurrentWorkSpace =>
+        App.Current.WorkSpaceContextManager.CurrentWorkSpace;
 
-    partial void OnCurrentWorkSpaceChanged(WorkSpace value)
+    public WorkSpaceTreeViewModel()
     {
-        UpdateTreeStructures();
+        try
+        {
+            // 注册工作空间变更消息
+            WeakReferenceMessenger.Default.Register<WorkSpaceChangedMessage>(
+                this,
+                OnWorkSpaceChanged
+            );
+
+            // 生成测试数据
+            GenerateTestData();
+        }
+        catch (Exception ex)
+        {
+            log.Error("WorkSpaceTreeViewModel 初始化失败", ex);
+            throw;
+        }
     }
 
     /// <summary>
@@ -102,14 +88,17 @@ public partial class WorkSpaceTreeViewModel : ObservableObject
     [ObservableProperty]
     private WorkSpaceTreeElement? selectedNode;
 
-    // 监听选中节点变化
+    /// <summary>
+    /// 监听选中节点变化
+    /// </summary>
+    /// <param name="value"></param>
     partial void OnSelectedNodeChanged(WorkSpaceTreeElement? value)
     {
         try
         {
             if (value != null)
             {
-                log.Info($"Selected node changed: {value.Name}, Type: {value.Type}");
+                log.Info($"选中节点: {value.Name}, Type: {value.Type}");
                 // 这里可以处理节点选中后的逻辑
                 // 例如：发送消息通知其他组件
                 WeakReferenceMessenger.Default.Send(new TreeNodeSelectedMessage(value));
@@ -117,7 +106,7 @@ public partial class WorkSpaceTreeViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            log.Error("Error handling node selection change", ex);
+            log.Error("处理节点选中失败", ex);
         }
     }
 
@@ -134,30 +123,6 @@ public partial class WorkSpaceTreeViewModel : ObservableObject
         }
     }
 
-    public WorkSpaceTreeViewModel()
-    {
-        try
-        {
-            CurrentWorkSpace = App.Current.WorkSpaceContextManager.CurrentWorkSpace;
-
-            // 注册工作空间变更消息
-            WeakReferenceMessenger.Default.Register<WorkSpaceChangedMessage>(
-                this,
-                OnWorkSpaceChanged
-            );
-
-            // 生成测试数据
-            GenerateTestData();
-
-            log.Info("WorkSpaceTreeViewModel initialized successfully");
-        }
-        catch (Exception ex)
-        {
-            log.Error("Failed to initialize WorkSpaceTreeViewModel", ex);
-            throw;
-        }
-    }
-
     /// <summary>
     /// 处理工作空间变更消息
     /// </summary>
@@ -165,12 +130,12 @@ public partial class WorkSpaceTreeViewModel : ObservableObject
     {
         try
         {
-            CurrentWorkSpace = message.NewWorkSpace;
-            log.Info("Workspace changed, tree structures updated");
+            log.Info("更新 WorkSpaceTree");
+            UpdateTreeStructures();
         }
         catch (Exception ex)
         {
-            log.Error("Failed to handle workspace change", ex);
+            log.Error("WorkSpaceTree 更新失败", ex);
         }
     }
 
@@ -188,12 +153,11 @@ public partial class WorkSpaceTreeViewModel : ObservableObject
             // 解析工作空间并生成树结构
             ParseWorkSpaceToDefaultTree();
             ParseWorkSpaceToCompactTree();
-
-            log.Info("Tree structures updated successfully");
+            log.Info("更新WorkSpaceTree");
         }
         catch (Exception ex)
         {
-            log.Error("Failed to update tree structures", ex);
+            log.Error("工作空间树结构更新失败", ex);
             throw;
         }
     }
@@ -222,7 +186,6 @@ public partial class WorkSpaceTreeViewModel : ObservableObject
                     DataContext = axis,
                     ParentID = root.ID
                 };
-                root.Children.Add(axisNode);
                 DefaultTreeNodes.Add(axisNode);
             }
         }
@@ -239,7 +202,6 @@ public partial class WorkSpaceTreeViewModel : ObservableObject
                     DataContext = robot,
                     ParentID = root.ID
                 };
-                root.Children.Add(robotNode);
                 DefaultTreeNodes.Add(robotNode);
             }
         }
@@ -256,7 +218,6 @@ public partial class WorkSpaceTreeViewModel : ObservableObject
                     DataContext = interference,
                     ParentID = root.ID
                 };
-                root.Children.Add(interferenceNode);
                 DefaultTreeNodes.Add(interferenceNode);
             }
         }
@@ -265,80 +226,85 @@ public partial class WorkSpaceTreeViewModel : ObservableObject
     }
 
     /// <summary>
-    /// 解析工作空间生成压缩树结构
+    /// 解析工作空间生成分组树结构
     /// </summary>
     private void ParseWorkSpaceToCompactTree()
     {
         var root = new WorkSpaceTreeElement { Name = "分类视图", Type = WorkSpaceElementType.None };
+        CompactTreeNodes.Add(root);
 
         // 创建分类节点
-        var axesNode = new WorkSpaceTreeElement
+        var axisGroup = new WorkSpaceTreeElement
         {
             Name = "轴系",
-            Type = WorkSpaceElementType.Component
+            Type = WorkSpaceElementType.Group,
+            ParentID = root.ID
         };
-        var robotsNode = new WorkSpaceTreeElement
+        var robotGroup = new WorkSpaceTreeElement
         {
             Name = "机器人",
-            Type = WorkSpaceElementType.Robot
+            Type = WorkSpaceElementType.Group,
+            ParentID = root.ID
         };
-        var interferencesNode = new WorkSpaceTreeElement
+        var ifGroup = new WorkSpaceTreeElement
         {
             Name = "干涉检查",
-            Type = WorkSpaceElementType.Interference
+            Type = WorkSpaceElementType.Group,
+            ParentID = root.ID
         };
 
         // 按类型分组添加项目
         if (CurrentWorkSpace.Components?.Any() == true)
         {
-            foreach (var axis in CurrentWorkSpace.Components)
+            foreach (var component in CurrentWorkSpace.Components)
             {
-                axesNode.Children.Add(
-                    new WorkSpaceTreeElement
-                    {
-                        Name = axis.Name,
-                        Type = WorkSpaceElementType.Component,
-                        DataContext = axis
-                    }
-                );
+                var axisNode = new WorkSpaceTreeElement
+                {
+                    Name = component.Name,
+                    Type = WorkSpaceElementType.Component,
+                    DataContext = component,
+                    ParentID = axisGroup.ID
+                };
+                CompactTreeNodes.Add(axisNode);
             }
-            root.Children.Add(axesNode);
+            CompactTreeNodes.Add(axisGroup);
         }
 
         if (CurrentWorkSpace.Robots?.Any() == true)
         {
             foreach (var robot in CurrentWorkSpace.Robots)
             {
-                robotsNode.Children.Add(
-                    new WorkSpaceTreeElement
-                    {
-                        Name = robot.Name,
-                        Type = WorkSpaceElementType.Robot,
-                        DataContext = robot
-                    }
-                );
+                var robotNode = new WorkSpaceTreeElement
+                {
+                    Name = robot.Name,
+                    Type = WorkSpaceElementType.Robot,
+                    DataContext = robot,
+                    ParentID = robotGroup.ID
+                };
+                CompactTreeNodes.Add(robotNode);
             }
-            root.Children.Add(robotsNode);
+            CompactTreeNodes.Add(robotGroup);
         }
 
         if (CurrentWorkSpace.Interferences?.Any() == true)
         {
             foreach (var interference in CurrentWorkSpace.Interferences)
             {
-                interferencesNode.Children.Add(
-                    new WorkSpaceTreeElement
+                WorkSpaceTreeElement ifNode =
+                    new()
                     {
                         Name = interference.Name,
                         Type = WorkSpaceElementType.Interference,
-                        DataContext = interference
-                    }
-                );
+                        DataContext = interference,
+                        ParentID = ifGroup.ID
+                    };
+                CompactTreeNodes.Add(ifNode);
             }
-            root.Children.Add(interferencesNode);
+            CompactTreeNodes.Add(ifGroup);
         }
-
-        CompactTreeNodes.Add(root);
     }
+
+    #region Test
 
     /// <summary>
     /// 生成测试数据
@@ -348,33 +314,34 @@ public partial class WorkSpaceTreeViewModel : ObservableObject
         try
         {
             // 修改当前WorkSpace，添加测试数据
-            CurrentWorkSpace.Components = new()
-            {
-                new() { Name = "轴系1" },
-                new() { Name = "轴系2" }
-            };
+            CurrentWorkSpace.Components = new() { };
 
             CurrentWorkSpace.Robots = new()
             {
                 new(new("机器人1", RobotType.Custom)),
-                new(new("机器人2", RobotType.Custom))
+                new(new("机器人2", RobotType.Custom)),
+                new(new("机器人3", RobotType.Custom)),
+                new(new("机器人4", RobotType.Custom))
             };
 
             CurrentWorkSpace.Interferences = new()
             {
                 new() { Name = "干涉检查1" },
-                new() { Name = "干涉检查2" }
+                new() { Name = "干涉检查2" },
+                new() { Name = "干涉检查3" },
+                new() { Name = "干涉检查4" }
             };
 
             // 触发树结构更新
             UpdateTreeStructures();
 
-            log.Info("Test data generated successfully");
+            log.Info("测试数据生成成功");
         }
         catch (Exception ex)
         {
-            log.Error("Failed to generate test data", ex);
+            log.Error("测试数据生成失败", ex);
             throw;
         }
     }
+    #endregion
 }

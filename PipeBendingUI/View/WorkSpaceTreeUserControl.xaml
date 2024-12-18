@@ -1,55 +1,64 @@
 ﻿<UserControl
-    x:Class="PipeBendingUI.View.WorkSpaceTreeUserControl"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
-    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
-    xmlns:local="clr-namespace:PipeBendingUI.View"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewmodel="clr-namespace:PipeBendingUI.ViewModel"
-    d:Background="LightGreen"
-    d:DesignHeight="450"
-    d:DesignWidth="400"
-    mc:Ignorable="d">
-    <UserControl.DataContext>
-        <viewmodel:WorkSpaceTreeViewModel />
-    </UserControl.DataContext>
+  x:Class="PipeBendingUI.View.WorkSpaceTreeUserControl"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+  xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+  xmlns:local="clr-namespace:PipeBendingUI.View"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:viewmodel="clr-namespace:PipeBendingUI.ViewModel"
+  d:Background="LightGreen"
+  d:DesignHeight="450"
+  d:DesignWidth="400"
+  mc:Ignorable="d">
+  <UserControl.DataContext>
+    <viewmodel:WorkSpaceTreeViewModel />
+  </UserControl.DataContext>
 
-    <UserControl.Resources>
-        <!--  TreeViewControl的通用样式  -->
-        <Style x:Key="CommonTreeViewStyle" TargetType="dxg:TreeViewControl">
-            <Setter Property="ShowBorder" Value="True" />
-            <Setter Property="ItemsSource" Value="{Binding}" />
-            <Setter Property="AutoExpandAllNodes" Value="True" />
-            <Setter Property="SelectionMode" Value="Row" />
-        </Style>
-    </UserControl.Resources>
+  <UserControl.Resources>
+    <!--  TreeViewControl的通用样式  -->
+    <Style x:Key="CommonTreeViewStyle" TargetType="dxg:TreeViewControl">
+      <Setter Property="ShowBorder" Value="True" />
+      <Setter Property="ItemsSource" Value="{Binding}" />
+      <Setter Property="AutoExpandAllNodes" Value="True" />
+      <Setter Property="SelectionMode" Value="Row" />
+      <Setter Property="AllowDragDrop" Value="True" />
+      <Setter Property="AllowScrollingOnDrag" Value="True" />
+    </Style>
+  </UserControl.Resources>
 
-    <dx:DXTabControl>
-        <!--  Tab 1: 默认显示模式  -->
-        <dx:DXTabItem Header="默认视图">
-            <dxg:TreeViewControl
-                ItemsSource="{Binding DefaultTreeNodes}"
-                KeyFieldName="ID"
-                NodeCollapsed="TreeViewControl_NodeCollapsed"
-                NodeExpanded="TreeViewControl_NodeExpanded"
-                NodeIndent="9"
-                ParentFieldName="ParentID"
-                SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
-                Style="{StaticResource CommonTreeViewStyle}"
-                TreeDerivationMode="Selfreference"
-                TreeLineStyle="Solid"
-                TreeViewFieldName="Name" />
-        </dx:DXTabItem>
+  <dx:DXTabControl>
+    <!--  Tab 1: 默认显示模式  -->
+    <dx:DXTabItem Header="默认视图">
+      <dxg:TreeViewControl
+        ItemsSource="{Binding DefaultTreeNodes}"
+        KeyFieldName="ID"
+        NodeCollapsed="TreeViewControl_NodeCollapsed"
+        NodeExpanded="TreeViewControl_NodeExpanded"
+        NodeIndent="9"
+        ParentFieldName="ParentID"
+        SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
+        Style="{StaticResource CommonTreeViewStyle}"
+        TreeDerivationMode="Selfreference"
+        TreeLineStyle="Solid"
+        TreeViewFieldName="Name" />
+    </dx:DXTabItem>
 
-        <!--  Tab 2: 列表显示模式  -->
-        <dx:DXTabItem Header="列表视图">
-            <dxg:TreeViewControl
-                ItemsSource="{Binding CompactTreeNodes}"
-                NodeIndent="1"
-                SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
-                Style="{StaticResource CommonTreeViewStyle}" />
-        </dx:DXTabItem>
-    </dx:DXTabControl>
+    <!--  Tab 2: 列表显示模式  -->
+    <dx:DXTabItem Header="列表视图">
+      <dxg:TreeViewControl
+        ItemsSource="{Binding CompactTreeNodes}"
+        KeyFieldName="ID"
+        NodeCollapsed="TreeViewControl_NodeCollapsed"
+        NodeExpanded="TreeViewControl_NodeExpanded"
+        NodeIndent="9"
+        ParentFieldName="ParentID"
+        SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
+        Style="{StaticResource CommonTreeViewStyle}"
+        TreeDerivationMode="Selfreference"
+        TreeLineStyle="Solid"
+        TreeViewFieldName="Name" />
+    </dx:DXTabItem>
+  </dx:DXTabControl>
 </UserControl>
