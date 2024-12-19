@@ -8,6 +8,7 @@ using System.Windows.Documents;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using DevExpress.Map.Kml.Model;
+using DevExpress.Xpf.CodeView;
 using DevExpress.Xpf.Reports.UserDesigner.ChartDesigner.Native;
 using IMKernel.Robotics;
 using log4net;
@@ -314,23 +315,25 @@ public partial class WorkSpaceTreeViewModel : ObservableObject
         try
         {
             // 修改当前WorkSpace，添加测试数据
-            CurrentWorkSpace.Components = new() { };
+            //CurrentWorkSpace.Components;
 
-            CurrentWorkSpace.Robots = new()
-            {
-                new(new("机器人1", RobotType.Custom)),
-                new(new("机器人2", RobotType.Custom)),
-                new(new("机器人3", RobotType.Custom)),
-                new(new("机器人4", RobotType.Custom))
-            };
+            CurrentWorkSpace.Robots.AddRange(
+                [
+                    new(new("机器人1", RobotType.Custom)),
+                    new(new("机器人2", RobotType.Custom)),
+                    new(new("机器人3", RobotType.Custom)),
+                    new(new("机器人4", RobotType.Custom))
+                ]
+            );
 
-            CurrentWorkSpace.Interferences = new()
-            {
-                new() { Name = "干涉检查1" },
-                new() { Name = "干涉检查2" },
-                new() { Name = "干涉检查3" },
-                new() { Name = "干涉检查4" }
-            };
+            CurrentWorkSpace.Interferences.AddRange(
+                [
+                    new() { Name = "干涉检查1" },
+                    new() { Name = "干涉检查2" },
+                    new() { Name = "干涉检查3" },
+                    new() { Name = "干涉检查4" }
+                ]
+            );
 
             // 触发树结构更新
             UpdateTreeStructures();

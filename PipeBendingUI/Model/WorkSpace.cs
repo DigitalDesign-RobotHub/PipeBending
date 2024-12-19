@@ -68,7 +68,7 @@ public class InterferencesElement : WorkSpaceElement
 public record WorkSpaceChangedMessage(WorkSpace NewWorkSpace);
 #endregion
 
-public partial class WorkSpace : ObservableObject, ICloneable
+public partial class WorkSpace : ObservableObject
 {
     private static readonly ILog log = LogManager.GetLogger(typeof(WorkSpace));
 
@@ -87,19 +87,9 @@ public partial class WorkSpace : ObservableObject, ICloneable
         log.Info("更新工作空间");
     }
 
-    public ObservableCollection<ComponentElement> Components { get; set; } = [];
+    public ObservableCollection<ComponentElement> Components { get; } = [];
 
-    public ObservableCollection<RobotElement> Robots { get; set; } = [];
+    public ObservableCollection<RobotElement> Robots { get; } = [];
 
-    public ObservableCollection<WorkSpaceElement> Interferences { get; set; } = [];
-
-    public object Clone()
-    {
-        return new WorkSpace()
-        {
-            Components = this.Components,
-            Robots = this.Robots,
-            Interferences = this.Interferences
-        };
-    }
+    public ObservableCollection<WorkSpaceElement> Interferences { get; } = [];
 }

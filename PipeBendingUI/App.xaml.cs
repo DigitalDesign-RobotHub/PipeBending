@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using DevExpress.Xpf.Editors;
+using IMKernel.OCCExtension;
 using log4net;
 using log4net.Config;
 using PipeBendingUI.Singleton;

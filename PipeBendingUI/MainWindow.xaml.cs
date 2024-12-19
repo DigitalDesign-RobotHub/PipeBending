@@ -50,10 +50,10 @@ public partial class MainWindow : ThemedWindow
     }
 
     /// <summary>
-    /// 创建新部件
+    /// 创建或保存新部件
     /// </summary>
     /// <param name="component"></param>
-    private void CreateComponentUI(Component component)
+    private void CreateComponentUI(Component? component)
     {
         if (MainWindow_Properties_Grid.Children.Count == 0)
         {
@@ -68,7 +68,10 @@ public partial class MainWindow : ThemedWindow
         MainWindow_Properties_Grid.Children.Clear();
         var componentUI = new ComponentProperties();
         var viewModel = new ComponentPropertiesViewModel();
-        viewModel.Component = component;
+        if (component != null)
+        {
+            //viewModel.Component = component;
+        }
         componentUI.DataContext = viewModel;
         MainWindow_Properties_Grid.Children.Add(componentUI);
     }

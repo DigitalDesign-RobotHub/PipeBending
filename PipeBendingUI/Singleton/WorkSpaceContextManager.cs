@@ -91,7 +91,7 @@ public partial class WorkSpaceContextManager : ObservableObject
     {
         if (CurrentWorkSpace != null)
         {
-            _historicalRecord[timestamp] = CurrentWorkSpace.Clone() as WorkSpace;
+            _historicalRecord[timestamp] = CurrentWorkSpace as WorkSpace;
             log.Info($"保存WorkSpace历史记录，时间: {timestamp}");
 
             // 如果历史记录超过最大数量，删除最早的记录
@@ -115,7 +115,7 @@ public partial class WorkSpaceContextManager : ObservableObject
         {
             if (_historicalRecord.TryGetValue(timestamp, out WorkSpace historicalWorkSpace))
             {
-                CurrentWorkSpace = historicalWorkSpace.Clone() as WorkSpace;
+                CurrentWorkSpace = historicalWorkSpace as WorkSpace;
                 log.Info($"还原到 {timestamp} 的workspace");
                 return true;
             }
@@ -141,7 +141,7 @@ public partial class WorkSpaceContextManager : ObservableObject
             var lastRecord = _historicalRecord.LastOrDefault();
             if (lastRecord.Value != null)
             {
-                CurrentWorkSpace = lastRecord.Value.Clone() as WorkSpace;
+                CurrentWorkSpace = lastRecord.Value as WorkSpace;
                 _historicalRecord.Remove(lastRecord.Key);
                 log.Info($"回退到上一个workspace: {lastRecord.Key}");
                 return true;

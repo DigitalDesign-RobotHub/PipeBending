@@ -68,14 +68,7 @@ public class CreateComponentCommand : ComponentPropertiesUndoCommand
 
     public override bool CanExecute(object? parameter)
     {
-        if (
-            parameter is FrameworkElement element
-            && element.DataContext is ComponentPropertiesViewModel viewModel
-        )
-        {
-            return viewModel.IsComponentValid;
-        }
-        return false;
+        throw new NotImplementedException("Undo方法不实现CanExecute");
     }
 
     public override void Execute(object? parameter = null)
@@ -138,18 +131,3 @@ public class SaveComponentCommand : ComponentPropertiesUndoCommand
         Components[index] = lastComponent;
     }
 }
-
-//public class CancerComponentCommand : ComponentPropertiesCommand
-//{
-//    public override string Description => "部件属性-取消";
-
-//    public override bool CanExecute(object? parameter)
-//    {
-//        return true;
-//    }
-
-//    public override void Execute(object? parameter)
-//    {
-//        WeakReferenceMessenger.Default.Send(new PropertiesUIFinishedMessage());
-//    }
-//}

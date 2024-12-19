@@ -28,15 +28,16 @@ public partial class ComponentPropertiesViewModel
         CreateComponentState = Visibility.Visible;
         SaveComponentState = Visibility.Collapsed;
         PoseViewModel = new PoseViewModel();
-        Component = new Component();
+        MovementFormula = MovementFormula.Static; //设置默认运动类型为静止
+        SelectedParentComponent = OriginComponent.Instance;
+        IsAddToWorkSpace = false;
     }
 
     public bool IsComponentValid
     {
         get
         {
-            var c = Component;
-            if (c.Name == "" || c.TransfromWithParent == null || c.MovementFormula == null)
+            if (Name == "" || Name == null || MovementFormula == null)
             {
                 return false;
             }
@@ -50,12 +51,21 @@ public partial class ComponentPropertiesViewModel
 
     [ObservableProperty]
     private string name;
-    public long ID { get; protected set; }
+
+    partial void OnNameChanged(string value)
+    {
+        CreateComponentCommand.NotifyCanExecuteChanged();
+    }
 
     public ObservableCollection<Trsf> Connection { get; set; }
 
     [ObservableProperty]
     private MovementFormula movementFormula;
+
+    partial void OnMovementFormulaChanged(MovementFormula value)
+    {
+        CreateComponentCommand.NotifyCanExecuteChanged();
+    }
 
     [ObservableProperty]
     private double initMovement;
@@ -75,38 +85,6 @@ public partial class ComponentPropertiesViewModel
     [ObservableProperty]
     private int parentConnection;
     #endregion
-    //partial void OnComponentChanged(Component value)
-    //{
-    //    PoseViewModel.ThePose = new(Component.Name, value.Datum);
-    //    // 当Component属性发生变化时，这个方法会被自动调用
-    //    //if (value != null)
-    //    //{
-    //    //    // 监听Component的Name属性变化
-    //    //    value.PropertyChanged += Component_PropertyChanged;
-    //    //}
-    //    CreateComponentCommand.NotifyCanExecuteChanged();
-    //    Debug.WriteLine("Component Changed");
-    //}
-
-    //partial void OnComponentChanged(Component? oldValue, Component newValue)
-    //{
-    //    Debug.WriteLine($"old:{oldValue?.Name} | new:{newValue.Name}");
-    //}
-
-    //private void Component_PropertyChanged(object sender, PropertyChangedEventArgs e)
-    //{
-    //    if (e.PropertyName == nameof(Component.Name))
-    //    {
-    //        // 当Name属性发生变化时，执行你想要的操作
-    //        OnPropertyChanged(nameof(Component));
-    //        // 通知命令状态可能已改变
-    //        CreateComponentCommand.NotifyCanExecuteChanged();
-    //        // 或者执行其他特定的逻辑
-    //    }
-    //}
-
-    [ObservableProperty]
-    private MovementFormula movement;
 
     [ObservableProperty]
     private Component selectedParentComponent;
@@ -138,14 +116,40 @@ public partial class ComponentPropertiesViewModel
         };
 
     public Visibility CreateComponentState { get; set; }
-    private bool IsAddToWorkSpace;
+
+    [ObservableProperty]
+    private bool isAddToWorkSpace;
 
     [RelayCommand(CanExecute = nameof(IsComponentValid))]
     private void CreateComponent()
     {
+        Trsf tWithParent;
+        if (Parent == null)
+        {
+            tWithParent = PoseViewModel.ThePose.Datum;
+        }
+        else
+        {
+            tWithParent =
+                -(Parent.Datum * Parent.Connection[ParentConnection]) * PoseViewModel.ThePose.Datum;
+        }
         App.Current.CommandManager.Execute(
             new CreateComponentCommand(),
-            (component, IsAddToWorkSpace)
+            (
+                new Component(
+                    name: Name,
+                    tWithParent,
+                    connection: Connection,
+                    movementFormula: MovementFormula,
+                    initMovement: InitMovement,
+                    minMovement: MinMovement,
+                    maxMovement: MaxMovement,
+                    shape: Shape,
+                    parent: Parent,
+                    parentConnection: ParentConnection
+                ),
+                IsAddToWorkSpace
+            )
         );
     }
 
@@ -154,7 +158,7 @@ public partial class ComponentPropertiesViewModel
     [RelayCommand]
     private void SaveComponent()
     {
-        App.Current.CommandManager.Execute(new SaveComponentCommand(), component);
+        //App.Current.CommandManager.Execute(new SaveComponentCommand(), component);
     }
 
     [RelayCommand]

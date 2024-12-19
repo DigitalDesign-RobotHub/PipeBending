@@ -46,6 +46,6 @@ public partial class CreateNewComponent : WorkSpaceRibbonPageCommand
 
     public override void Execute(object? parameter)
     {
-        WeakReferenceMessenger.Default.Send(new ComponentChangedMessage(new()));
+        WeakReferenceMessenger.Default.Send(new ComponentChangedMessage(null));
     }
 }
