@@ -29,11 +29,11 @@
   <DockPanel>
     <!--  顶部 Ribbon  -->
     <dxr:RibbonControl DockPanel.Dock="Top" RibbonStyle="Office2019">
-      <!--快捷按钮栏-->
+      <!--  快捷按钮栏  -->
       <dxr:RibbonControl.ToolbarItems>
         <dxb:BarButtonItemLink BarItemName="newItem" />
       </dxr:RibbonControl.ToolbarItems>
-      <!--Ribbon-->
+      <!--  Ribbon  -->
       <dxr:RibbonDefaultPageCategory>
         <!--  主选项卡  -->
         <dxr:RibbonPage x:Name="MainPage_RibbonPage" Caption="首页">
@@ -115,6 +115,12 @@
                 Content="等轴测"
                 Glyph="{dx:DXImage 'SvgImages/Actions/New.svg'}" />
             </dxr:BarButtonGroup>
+          </dxr:RibbonPageGroup>
+          <dxr:RibbonPageGroup x:Name="MainPage_ThreeDStatus_RibbonPageGroup" Caption="画布">
+            <dxb:BarCheckItem Glyph="{dx:DXImage SvgImages/Business Objects/BO_Localization.svg}" IsChecked="{Binding IsShowOriginTrihedron}" />
+            <dxb:BarCheckItem Glyph="{dx:DXImage SvgImages/Business Objects/BO_Localization.svg}" IsChecked="{Binding IsShowViewTrihedron}" />
+            <dxb:BarCheckItem Glyph="{dx:DXImage SvgImages/Business Objects/BO_Localization.svg}" IsChecked="{Binding IsShowViewCube}" />
+            <dxb:BarCheckItem Glyph="{dx:DXImage SvgImages/Business Objects/BO_Localization.svg}" IsChecked="{Binding IsShowGraduatedTrihedron}" />
           </dxr:RibbonPageGroup>
         </dxr:RibbonPage>
         <!--  工作空间选项卡  -->
@@ -228,14 +234,13 @@
           ItemWidth="5*"
           Orientation="Vertical">
           <dxdo:DocumentGroup
-            x:Name="Main_DocumentGroup"
             dxdo:DocumentGroup.PinLocation="Near"
             ClosePageButtonShowMode="InActiveTabPageHeader"
             ItemHeight="5*"
             MDIStyle="Tabbed"
             ShowCloseButton="True">
             <dxdo:DocumentPanel
-              x:Name="DataRecordDocumentPanel"
+              x:Name="ThreeDimension_DocumentPanel"
               dxdo:DocumentGroup.PinLocation="Near"
               dxdo:DocumentGroup.ShowPinButton="True"
               Caption="三维视图"

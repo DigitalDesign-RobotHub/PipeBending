@@ -27,7 +27,10 @@ public partial class ComponentPropertiesViewModel
     {
         CreateComponentState = Visibility.Visible;
         SaveComponentState = Visibility.Collapsed;
-        PoseViewModel = new PoseViewModel();
+        PoseViewModel = new PoseViewModel()
+        {
+            Context = App.Current.ThreeDimensionContextManager.MainContext
+        };
         MovementFormula = MovementFormula.Static; //设置默认运动类型为静止
         SelectedParentComponent = OriginComponent.Instance;
         IsAddToWorkSpace = false;

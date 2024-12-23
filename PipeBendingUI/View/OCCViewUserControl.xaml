@@ -90,6 +90,13 @@
               Glyph="{StaticResource ResourceKey=View_Axo_Icon}"
               Style="{StaticResource PopupButtonStyle}" />
           </dxlc:LayoutItem>
+          <dxlc:LayoutItem>
+            <dx:SimpleButton
+              Command="{Binding FitAllCommand}"
+              Glyph="{StaticResource ResourceKey=View_Axo_Icon}"
+              Style="{StaticResource PopupButtonStyle}" />
+          </dxlc:LayoutItem>
+
         </dxlc:LayoutGroup>
       </dxlc:LayoutControl>
     </hover:AirspacePopup>
