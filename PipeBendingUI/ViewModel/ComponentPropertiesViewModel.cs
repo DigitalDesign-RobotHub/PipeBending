@@ -1,34 +1,32 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Input;
+
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+
 using IMKernel.Model;
-using IMKernel.OCCExtension;
 using IMKernel.Utils;
 using IMKernel.ViewModel;
+
 using OCCTK.Extension;
 using OCCTK.OCC.gp;
+
 using PipeBendingUI.Command;
 using PipeBendingUI.Message;
+
 using Component = IMKernel.Model.Component;
 
 namespace PipeBendingUI.ViewModel;
 
-[ObservableObject]
-public partial class ComponentPropertiesViewModel
-{
-    public ComponentPropertiesViewModel()
-    {
+public partial class ComponentPropertiesViewModel:ObservableObject {
+    public ComponentPropertiesViewModel() {
+        Name = "新建组件";
+        Connection = new();
         CreateComponentState = Visibility.Visible;
         SaveComponentState = Visibility.Collapsed;
-        PoseViewModel = new PoseViewModel()
-        {
+        PoseViewModel = new PoseViewModel() {
             Context = App.Current.ThreeDimensionContextManager.MainContext
         };
         MovementFormula = MovementFormula.Static; //设置默认运动类型为静止
@@ -36,12 +34,9 @@ public partial class ComponentPropertiesViewModel
         IsAddToWorkSpace = false;
     }
 
-    public bool IsComponentValid
-    {
-        get
-        {
-            if (Name == "" || Name == null || MovementFormula == null)
-            {
+    public bool IsComponentValid {
+        get {
+            if( Name == "" || Name == null || MovementFormula == null ) {
                 return false;
             }
             return true;
@@ -55,8 +50,7 @@ public partial class ComponentPropertiesViewModel
     [ObservableProperty]
     private string name;
 
-    partial void OnNameChanged(string value)
-    {
+    partial void OnNameChanged( string value ) {
         CreateComponentCommand.NotifyCanExecuteChanged();
     }
 
@@ -65,8 +59,7 @@ public partial class ComponentPropertiesViewModel
     [ObservableProperty]
     private MovementFormula movementFormula;
 
-    partial void OnMovementFormulaChanged(MovementFormula value)
-    {
+    partial void OnMovementFormulaChanged( MovementFormula value ) {
         CreateComponentCommand.NotifyCanExecuteChanged();
     }
 
@@ -92,8 +85,7 @@ public partial class ComponentPropertiesViewModel
     [ObservableProperty]
     private Component selectedParentComponent;
 
-    partial void OnSelectedParentComponentChanged(Component value)
-    {
+    partial void OnSelectedParentComponentChanged( Component value ) {
         Parent = value;
     }
 
@@ -124,17 +116,13 @@ public partial class ComponentPropertiesViewModel
     private bool isAddToWorkSpace;
 
     [RelayCommand(CanExecute = nameof(IsComponentValid))]
-    private void CreateComponent()
-    {
+    private void CreateComponent() {
         Trsf tWithParent;
-        if (Parent == null)
-        {
+        if( Parent == null ) {
             tWithParent = PoseViewModel.ThePose.Datum;
-        }
-        else
-        {
+        } else {
             tWithParent =
-                -(Parent.Datum * Parent.Connection[ParentConnection]) * PoseViewModel.ThePose.Datum;
+                -( Parent.Datum * Parent.Connection[ParentConnection] ) * PoseViewModel.ThePose.Datum;
         }
         App.Current.CommandManager.Execute(
             new CreateComponentCommand(),
@@ -159,14 +147,12 @@ public partial class ComponentPropertiesViewModel
     public Visibility SaveComponentState { get; set; }
 
     [RelayCommand]
-    private void SaveComponent()
-    {
+    private void SaveComponent() {
         //App.Current.CommandManager.Execute(new SaveComponentCommand(), component);
     }
 
     [RelayCommand]
-    private void CancerComponent()
-    {
+    private void CancerComponent() {
         WeakReferenceMessenger.Default.Send(new PropertiesUIFinishedMessage());
     }
 }

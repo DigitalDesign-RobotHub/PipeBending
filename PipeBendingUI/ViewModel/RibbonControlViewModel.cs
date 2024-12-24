@@ -19,37 +19,37 @@ public partial class RibbonControlViewModel:ObservableObject {
     private static ThreeDimensionContext? threeDimensionContext => App.Current.ThreeDimensionContextManager.MainContext;
 
     public RibbonControlViewModel() {
-    VisibilityControl(); //权限控制
-    CreateNewComponentCommand = new CreateNewComponent(); //创建新部件
-    CreateNewRobotCommand = new CreateNewComponent(); //todo 创建新机器人
-    IsShowOriginTrihedron = false;
-    IsShowViewTrihedron = false;
-    IsShowViewCube = true;
-    IsShowGraduatedTrihedron = false;
+        VisibilityControl(); //权限控制
+        CreateNewComponentCommand = new CreateNewComponent(); //创建新部件
+        CreateNewRobotCommand = new CreateNewComponent(); //todo 创建新机器人
+        IsShowOriginTrihedron = false;
+        IsShowViewTrihedron = false;
+        IsShowViewCube = true;
+        IsShowGraduatedTrihedron = false;
     }
 
     [ObservableProperty]
     private bool isShowOriginTrihedron;
-    partial void OnIsShowOriginTrihedronChanged(bool value) {
-    threeDimensionContext?.DisplayOriginTrihedron(value);
+    partial void OnIsShowOriginTrihedronChanged( bool value ) {
+        threeDimensionContext?.DisplayOriginTrihedron(value);
     }
 
     [ObservableProperty]
     private bool isShowViewTrihedron;
-    partial void OnIsShowViewTrihedronChanged(bool value) {
-    threeDimensionContext?.DisplayViewTrihedron(value);
+    partial void OnIsShowViewTrihedronChanged( bool value ) {
+        threeDimensionContext?.DisplayViewTrihedron(value);
     }
 
     [ObservableProperty]
     private bool isShowViewCube;
-    partial void OnIsShowViewCubeChanged(bool value) {
-    threeDimensionContext?.DisplayViewCube(value);
+    partial void OnIsShowViewCubeChanged( bool value ) {
+        threeDimensionContext?.DisplayViewCube(value);
     }
 
     [ObservableProperty]
     private bool isShowGraduatedTrihedron;
-    partial void OnIsShowGraduatedTrihedronChanged(bool value) {
-    threeDimensionContext?.DisplayGraduatedTrihedron(value);
+    partial void OnIsShowGraduatedTrihedronChanged( bool value ) {
+        threeDimensionContext?.DisplayGraduatedTrihedron(value);
     }
 
     [RelayCommand]
