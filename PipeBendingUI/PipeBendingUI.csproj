@@ -16,7 +16,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+	  <None Remove=".gitignore" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="DevExpress.Mvvm.CodeGenerators" Version="22.1.1" />
 		<PackageReference Include="DevExpress.Wpf" Version="23.2.3" />
 		<PackageReference Include="DevExpress.Wpf.Core" Version="23.2.3" />
@@ -26,6 +30,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\CSharpOCCToolKit\CSharpOCCToolKit.vcxproj" />
+		<ProjectReference Include="..\..\IMKernelUI\IMKernelUI.csproj" />
 		<ProjectReference Include="..\..\IMKernel\IMKernel.csproj" />
 		<ProjectReference Include="..\PipeBendingBLL\PipeBendingBLL.csproj" />
 	</ItemGroup>

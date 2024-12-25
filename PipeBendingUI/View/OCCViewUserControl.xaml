@@ -7,7 +7,7 @@
   xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
   xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
   xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
-  xmlns:hover="clr-namespace:IMKernel.View;assembly=IMKernel"
+  xmlns:hover="clr-namespace:IMKernelUI.View;assembly=IMKernelUI"
   xmlns:local="clr-namespace:PipeBendingUI.View"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:viewmodel="clr-namespace:PipeBendingUI.ViewModel"
@@ -31,7 +31,9 @@
     <viewmodel:OCCViewViewModel />
   </UserControl.DataContext>
   <Grid x:Name="Test_Grid">
+    <!--  主画布  -->
     <WindowsFormsHost x:Name="OCCCanvas_WindowsFormsHost" />
+    <!--  悬浮菜单  -->
     <hover:AirspacePopup
       x:Name="Test_AirspacePopup"
       MaxWidth="{Binding PopupWidth}"
@@ -45,7 +47,6 @@
       Placement="Center"
       PlacementTarget="{Binding ElementName=OCCCanvas_WindowsFormsHost}"
       VerticalOffset="{Binding PopupVerticalOffset}">
-      <!--  悬浮菜单  -->
       <dxlc:LayoutControl Background="#9966ccff">
         <dxlc:LayoutGroup HorizontalAlignment="Left">
           <dxlc:LayoutItem>
@@ -96,7 +97,6 @@
               Glyph="{StaticResource ResourceKey=View_Axo_Icon}"
               Style="{StaticResource PopupButtonStyle}" />
           </dxlc:LayoutItem>
-
         </dxlc:LayoutGroup>
       </dxlc:LayoutControl>
     </hover:AirspacePopup>

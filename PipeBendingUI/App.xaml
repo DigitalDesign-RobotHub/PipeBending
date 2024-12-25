@@ -6,7 +6,7 @@
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <!--  引用 IMKernel 的资源字典  -->
-        <ResourceDictionary Source="pack://application:,,,/IMKernel;component/Resource/Icon.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/IMKernelUI;component/Resources/Icon.xaml" />
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Application.Resources>

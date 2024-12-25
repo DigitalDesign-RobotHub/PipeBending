@@ -2,115 +2,113 @@
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 
 using IMKernel.Command;
 using IMKernel.Visualization;
 
+using IMKernelUI.Message;
+
 using log4net;
 
+using System;
 using PipeBendingUI.Command;
-
+using PipeBendingUI.Message;
 namespace PipeBendingUI.ViewModel;
 
 public partial class RibbonControlViewModel:ObservableObject {
-    private static readonly ILog log = LogManager.GetLogger(typeof(RibbonControlViewModel));
+	private static readonly ILog log = LogManager.GetLogger(typeof(RibbonControlViewModel));
 
-    private static readonly Singleton.CommandManager commandManager = App.Current.CommandManager;
-    private static ThreeDimensionContext? threeDimensionContext => App.Current.ThreeDimensionContextManager.MainContext;
+	private static readonly Singleton.CommandManager commandManager = App.Current.CommandManager;
+	private static ThreeDimensionContext? threeDimensionContext => App.Current.ThreeDimensionContextManager.MainContext;
+	private OCCCanvas mainView;
 
-    public RibbonControlViewModel() {
-        VisibilityControl(); //权限控制
-        CreateNewComponentCommand = new CreateNewComponent(); //创建新部件
-        CreateNewRobotCommand = new CreateNewComponent(); //todo 创建新机器人
-        IsShowOriginTrihedron = false;
-        IsShowViewTrihedron = false;
-        IsShowViewCube = true;
-        IsShowGraduatedTrihedron = false;
-    }
+	public RibbonControlViewModel( ) {
+		VisibilityControl( ); //权限控制
+		CreateNewComponentCommand = new CreateNewComponent( ); //创建新部件
+		CreateNewRobotCommand = new CreateNewComponent( ); //todo 创建新机器人
+		WeakReferenceMessenger.Default.Register<CanvasCreatedMessage>(this, ( r, m ) => {
+			if( m.Value.contextID != 0 ) {
+				return;
+			}
+			//创建画布
+			mainView = threeDimensionContext?.CreateView(commandManager) ?? throw new Exception("创建画布失败");
+			IsShowOriginTrihedron = m.Value.orignTri;
+			IsShowViewTrihedron = m.Value.viewTri;
+			IsShowViewCube = m.Value.viewCube;
+			IsShowGraduatedTrihedron = false;
+		});
+		WeakReferenceMessenger.Default.Register<RibbonControlViewModel, MainCanvasRequestMessage>(this, ( r, m ) => {
+			m.Reply(r.mainView);
+		}
+		);
+	}
 
-    [ObservableProperty]
-    private bool isShowOriginTrihedron;
-    partial void OnIsShowOriginTrihedronChanged( bool value ) {
-        threeDimensionContext?.DisplayOriginTrihedron(value);
-    }
+	[ObservableProperty]
+	private bool isShowOriginTrihedron;
+	partial void OnIsShowOriginTrihedronChanged( bool value ) {
+		threeDimensionContext?.DisplayOriginTrihedron(value);
+		WeakReferenceMessenger.Default.Send(new ViewStatusChangedMessage((contextID: 0, viewCube: IsShowViewCube, orignTri: IsShowOriginTrihedron, viewTri: IsShowViewTrihedron)));
+	}
 
-    [ObservableProperty]
-    private bool isShowViewTrihedron;
-    partial void OnIsShowViewTrihedronChanged( bool value ) {
-        threeDimensionContext?.DisplayViewTrihedron(value);
-    }
+	[ObservableProperty]
+	private bool isShowViewTrihedron;
+	partial void OnIsShowViewTrihedronChanged( bool value ) {
+		threeDimensionContext?.DisplayViewTrihedron(value);
+		WeakReferenceMessenger.Default.Send(new ViewStatusChangedMessage((contextID: 0, viewCube: IsShowViewCube, orignTri: IsShowOriginTrihedron, viewTri: IsShowViewTrihedron)));
+	}
 
-    [ObservableProperty]
-    private bool isShowViewCube;
-    partial void OnIsShowViewCubeChanged( bool value ) {
-        threeDimensionContext?.DisplayViewCube(value);
-    }
+	[ObservableProperty]
+	private bool isShowViewCube;
+	partial void OnIsShowViewCubeChanged( bool value ) {
+		threeDimensionContext?.DisplayViewCube(value);
+		WeakReferenceMessenger.Default.Send(new ViewStatusChangedMessage((contextID: 0, viewCube: IsShowViewCube, orignTri: IsShowOriginTrihedron, viewTri: IsShowViewTrihedron)));
+	}
 
-    [ObservableProperty]
-    private bool isShowGraduatedTrihedron;
-    partial void OnIsShowGraduatedTrihedronChanged( bool value ) {
-        threeDimensionContext?.DisplayGraduatedTrihedron(value);
-    }
+	[ObservableProperty]
+	private bool isShowGraduatedTrihedron;
+	partial void OnIsShowGraduatedTrihedronChanged( bool value ) {
+		DisplayGraduatedTrihedron(value);
+	}
 
-    [RelayCommand]
-    private void Undo() => App.Current.CommandManager.Undo();
+	#region 刻度坐标系
+	public void DisplayGraduatedTrihedron( bool showGraduatedTrihedron ) {
+		if( showGraduatedTrihedron ) {
+			mainView.View.DisplayDefault_GraduatedTrihedron( );
+		} else {
+			mainView.View.Hide_GraduatedTrihedron( );
+		}
+		mainView.Update( );
+	}
+	#endregion
 
-    public ICommand CreateNewComponentCommand { get; }
-    public ICommand CreateNewRobotCommand { get; }
+	[RelayCommand]
+	private void Undo( ) => App.Current.CommandManager.Undo( );
 
-    [RelayCommand]
-    private void FrontView() =>
-        commandManager.Execute(
-            new FrontViewCommand(),
-            App.Current.ThreeDimensionContextManager.Contexts[0].ViewList[0].View
-        );
+	public ICommand CreateNewComponentCommand { get; }
+	public ICommand CreateNewRobotCommand { get; }
 
-    [RelayCommand]
-    private void BackView() =>
-        commandManager.Execute(
-            new BackViewCommand(),
-            App.Current.ThreeDimensionContextManager.Contexts[0].ViewList[0].View
-        );
+	[RelayCommand]
+	private void FrontView( ) => commandManager.Execute(new FrontViewCommand( ), mainView.View);
 
-    [RelayCommand]
-    private void TopView() =>
-        commandManager.Execute(
-            new TopViewCommand(),
-            App.Current.ThreeDimensionContextManager.Contexts[0].ViewList[0].View
-        );
+	[RelayCommand]
+	private void BackView( ) => commandManager.Execute(new BackViewCommand( ), mainView.View);
 
-    [RelayCommand]
-    private void BottomView() =>
-        commandManager.Execute(
-            new BottomViewCommand(),
-            App.Current.ThreeDimensionContextManager.Contexts[0].ViewList[0].View
-        );
+	[RelayCommand]
+	private void TopView( ) => commandManager.Execute(new TopViewCommand( ), mainView.View);
 
-    [RelayCommand]
-    private void LeftView() =>
-        commandManager.Execute(
-            new LeftViewCommand(),
-            App.Current.ThreeDimensionContextManager.Contexts[0].ViewList[0].View
-        );
+	[RelayCommand]
+	private void BottomView( ) => commandManager.Execute(new BottomViewCommand( ), mainView.View);
 
-    [RelayCommand]
-    private void RightView() =>
-        commandManager.Execute(
-            new RightViewCommand(),
-            App.Current.ThreeDimensionContextManager.Contexts[0].ViewList[0].View
-        );
+	[RelayCommand]
+	private void LeftView( ) => commandManager.Execute(new LeftViewCommand( ), mainView.View);
 
-    [RelayCommand]
-    private void AxoView() =>
-        commandManager.Execute(
-            new AxoViewCommand(),
-            App.Current.ThreeDimensionContextManager.Contexts[0].ViewList[0].View
-        );
+	[RelayCommand]
+	private void RightView( ) => commandManager.Execute(new RightViewCommand( ), mainView.View);
 
-    [RelayCommand]
-    private void FitAll() =>
-        commandManager.Execute(
-            new FitAllCommand(),
-            App.Current.ThreeDimensionContextManager.Contexts[0].ViewList[0].View
-        );
+	[RelayCommand]
+	private void AxoView( ) => commandManager.Execute(new AxoViewCommand( ), mainView.View);
+
+	[RelayCommand]
+	private void FitAll( ) => commandManager.Execute(new FitAllCommand( ), mainView.View);
 }

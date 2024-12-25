@@ -7,7 +7,7 @@
   xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
   xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
   xmlns:kernelconverter="clr-namespace:IMKernel.Converter;assembly=IMKernel"
-  xmlns:kernelview="clr-namespace:IMKernel.View;assembly=IMKernel"
+  xmlns:kernelview="clr-namespace:IMKernelUI.View;assembly=IMKernelUI"
   xmlns:local="clr-namespace:PipeBendingUI.View"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:model="clr-namespace:PipeBendingUI.ViewModel"

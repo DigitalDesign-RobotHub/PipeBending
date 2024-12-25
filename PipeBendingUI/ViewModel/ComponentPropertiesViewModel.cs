@@ -7,8 +7,11 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
 using IMKernel.Model;
+using IMKernel.OCCExtension;
 using IMKernel.Utils;
-using IMKernel.ViewModel;
+using IMKernel.Visualization;
+
+using IMKernelUI.ViewModel;
 
 using OCCTK.Extension;
 using OCCTK.OCC.gp;
@@ -21,138 +24,141 @@ using Component = IMKernel.Model.Component;
 namespace PipeBendingUI.ViewModel;
 
 public partial class ComponentPropertiesViewModel:ObservableObject {
-    public ComponentPropertiesViewModel() {
-        Name = "新建组件";
-        Connection = new();
-        CreateComponentState = Visibility.Visible;
-        SaveComponentState = Visibility.Collapsed;
-        PoseViewModel = new PoseViewModel() {
-            Context = App.Current.ThreeDimensionContextManager.MainContext
-        };
-        MovementFormula = MovementFormula.Static; //设置默认运动类型为静止
-        SelectedParentComponent = OriginComponent.Instance;
-        IsAddToWorkSpace = false;
-    }
+	public ComponentPropertiesViewModel( ) {
+		canvas = WeakReferenceMessenger.Default.Send<MainCanvasRequestMessage>( );
 
-    public bool IsComponentValid {
-        get {
-            if( Name == "" || Name == null || MovementFormula == null ) {
-                return false;
-            }
-            return true;
-        }
-    }
+		Name = "";
+		Connection = new( );
+		CreateComponentState = Visibility.Visible;
+		SaveComponentState = Visibility.Collapsed;
+		PoseViewModel = new PoseViewModel(OriginPose.ToPose( ), [ ], canvas) {
+			Context = App.Current.ThreeDimensionContextManager.MainContext
+		};
+		MovementFormula = MovementFormula.Static; //设置默认运动类型为静止
+		SelectedParentComponent = OriginComponent.Instance;
+		IsAddToWorkSpace = false;
+	}
 
-    #region 属性和字段
-    [ObservableProperty]
-    private PoseViewModel poseViewModel;
+	public bool IsComponentValid {
+		get {
+			if( Name == "" || Name == null || MovementFormula == null ) {
+				return false;
+			}
+			return true;
+		}
+	}
 
-    [ObservableProperty]
-    private string name;
+	#region 属性和字段
+	private OCCCanvas? canvas;
+	[ObservableProperty]
+	private PoseViewModel poseViewModel;
 
-    partial void OnNameChanged( string value ) {
-        CreateComponentCommand.NotifyCanExecuteChanged();
-    }
+	[ObservableProperty]
+	private string name;
 
-    public ObservableCollection<Trsf> Connection { get; set; }
+	partial void OnNameChanged( string value ) {
+		CreateComponentCommand.NotifyCanExecuteChanged( );
+	}
 
-    [ObservableProperty]
-    private MovementFormula movementFormula;
+	public ObservableCollection<Trsf> Connection { get; set; }
 
-    partial void OnMovementFormulaChanged( MovementFormula value ) {
-        CreateComponentCommand.NotifyCanExecuteChanged();
-    }
+	[ObservableProperty]
+	private MovementFormula movementFormula;
 
-    [ObservableProperty]
-    private double initMovement;
+	partial void OnMovementFormulaChanged( MovementFormula value ) {
+		CreateComponentCommand.NotifyCanExecuteChanged( );
+	}
 
-    [ObservableProperty]
-    private double minMovement;
+	[ObservableProperty]
+	private double initMovement;
 
-    [ObservableProperty]
-    private double maxMovement;
+	[ObservableProperty]
+	private double minMovement;
 
-    [ObservableProperty]
-    private XShape? shape;
+	[ObservableProperty]
+	private double maxMovement;
 
-    [ObservableProperty]
-    private Component? parent;
+	[ObservableProperty]
+	private XShape? shape;
 
-    [ObservableProperty]
-    private int parentConnection;
-    #endregion
+	[ObservableProperty]
+	private Component? parent;
 
-    [ObservableProperty]
-    private Component selectedParentComponent;
+	[ObservableProperty]
+	private int parentConnection;
+	#endregion
 
-    partial void OnSelectedParentComponentChanged( Component value ) {
-        Parent = value;
-    }
+	[ObservableProperty]
+	private Component selectedParentComponent;
 
-    public ObservableCollection<Component> Components =>
-        App.Current.StaticResourceManager.Components;
+	partial void OnSelectedParentComponentChanged( Component value ) {
+		Parent = value;
+	}
 
-    public List<MovementFormula> DefaultMovements { get; } =
-        new()
-        {
-            MovementFormula.Static,
-            MovementFormula.dX_Plus,
-            MovementFormula.dX_Minus,
-            MovementFormula.dY_Plus,
-            MovementFormula.dY_Minus,
-            MovementFormula.dZ_Plus,
-            MovementFormula.dZ_Minus,
-            MovementFormula.rX_Plus,
-            MovementFormula.rX_Minus,
-            MovementFormula.rY_Plus,
-            MovementFormula.rY_Minus,
-            MovementFormula.rZ_Plus,
-            MovementFormula.rZ_Minus,
-        };
+	public ObservableCollection<Component> Components =>
+		App.Current.StaticResourceManager.Components;
 
-    public Visibility CreateComponentState { get; set; }
+	public List<MovementFormula> DefaultMovements { get; } =
+		new( )
+		{
+			MovementFormula.Static,
+			MovementFormula.dX_Plus,
+			MovementFormula.dX_Minus,
+			MovementFormula.dY_Plus,
+			MovementFormula.dY_Minus,
+			MovementFormula.dZ_Plus,
+			MovementFormula.dZ_Minus,
+			MovementFormula.rX_Plus,
+			MovementFormula.rX_Minus,
+			MovementFormula.rY_Plus,
+			MovementFormula.rY_Minus,
+			MovementFormula.rZ_Plus,
+			MovementFormula.rZ_Minus,
+		};
 
-    [ObservableProperty]
-    private bool isAddToWorkSpace;
+	public Visibility CreateComponentState { get; set; }
 
-    [RelayCommand(CanExecute = nameof(IsComponentValid))]
-    private void CreateComponent() {
-        Trsf tWithParent;
-        if( Parent == null ) {
-            tWithParent = PoseViewModel.ThePose.Datum;
-        } else {
-            tWithParent =
-                -( Parent.Datum * Parent.Connection[ParentConnection] ) * PoseViewModel.ThePose.Datum;
-        }
-        App.Current.CommandManager.Execute(
-            new CreateComponentCommand(),
-            (
-                new Component(
-                    name: Name,
-                    tWithParent,
-                    connection: Connection,
-                    movementFormula: MovementFormula,
-                    initMovement: InitMovement,
-                    minMovement: MinMovement,
-                    maxMovement: MaxMovement,
-                    shape: Shape,
-                    parent: Parent,
-                    parentConnection: ParentConnection
-                ),
-                IsAddToWorkSpace
-            )
-        );
-    }
+	[ObservableProperty]
+	private bool isAddToWorkSpace;
 
-    public Visibility SaveComponentState { get; set; }
+	[RelayCommand(CanExecute = nameof(IsComponentValid))]
+	private void CreateComponent( ) {
+		Trsf tWithParent;
+		if( Parent == null ) {
+			tWithParent = PoseViewModel.ThePose.Datum;
+		} else {
+			tWithParent =
+				-( Parent.Datum * Parent.Connection[ParentConnection] ) * PoseViewModel.ThePose.Datum;
+		}
+		App.Current.CommandManager.Execute(
+			new CreateComponentCommand( ),
+			(
+				new Component(
+					name: Name,
+					tWithParent,
+					connection: Connection,
+					movementFormula: MovementFormula,
+					initMovement: InitMovement,
+					minMovement: MinMovement,
+					maxMovement: MaxMovement,
+					shape: Shape,
+					parent: Parent,
+					parentConnection: ParentConnection
+				),
+				IsAddToWorkSpace
+			)
+		);
+	}
 
-    [RelayCommand]
-    private void SaveComponent() {
-        //App.Current.CommandManager.Execute(new SaveComponentCommand(), component);
-    }
+	public Visibility SaveComponentState { get; set; }
 
-    [RelayCommand]
-    private void CancerComponent() {
-        WeakReferenceMessenger.Default.Send(new PropertiesUIFinishedMessage());
-    }
+	[RelayCommand]
+	private void SaveComponent( ) {
+		//App.Current.CommandManager.Execute(new SaveComponentCommand(), component);
+	}
+
+	[RelayCommand]
+	private void CancerComponent( ) {
+		WeakReferenceMessenger.Default.Send(new PropertiesUIFinishedMessage( ));
+	}
 }

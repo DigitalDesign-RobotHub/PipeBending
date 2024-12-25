@@ -17,57 +17,55 @@ namespace PipeBendingUI;
 /// Interaction logic for MainWindow.xaml
 /// </summary>
 public partial class MainWindow:ThemedWindow {
-    public MainWindow() {
-    InitializeComponent();
+    public MainWindow( ) {
+        InitializeComponent( );
 
-    #region Message
-    // 创建Component窗口
-    WeakReferenceMessenger.Default.Register<ComponentChangedMessage>(
-        this,
-        (r, m) => {
-        CreateComponentUI(m.Value);
-        }
-    );
-    //删除Properties窗口
-    WeakReferenceMessenger.Default.Register<PropertiesUIFinishedMessage>(
-        this,
-        (r, m) => {
-        MainWindow_Properties_Grid.Children.Clear();
-        MainWindow_Properties_Grid.Children.Add(
-                new System.Windows.Controls.Label() {
-                    HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
-                    VerticalAlignment = System.Windows.VerticalAlignment.Center,
-                    Content = "属性栏",
-                    FontSize = 40
-                }
-            );
-        }
-    );
-    #endregion
+        #region Message
+        // 创建Component窗口
+        WeakReferenceMessenger.Default.Register<ComponentChangedMessage>(
+            this,
+            ( r, m ) => {
+                CreateComponentUI(m.Value);
+            }
+        );
+        //删除Properties窗口
+        WeakReferenceMessenger.Default.Register<PropertiesUIFinishedMessage>(
+            this,
+            ( r, m ) => {
+                MainWindow_Properties_Grid.Children.Clear( );
+                MainWindow_Properties_Grid.Children.Add(
+                    new System.Windows.Controls.Label( ) {
+                        HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                        VerticalAlignment = System.Windows.VerticalAlignment.Center,
+                        Content = "属性栏",
+                        FontSize = 40
+                    }
+                );
+            }
+        );
+        #endregion
 
-    var ribbonControl = this.FindName("RibbonControl") as RibbonControl;
+        var ribbonControl = this.FindName("RibbonControl") as RibbonControl;
     }
 
     /// <summary>
     /// 创建或保存新部件
     /// </summary>
     /// <param name="component"></param>
-    private void CreateComponentUI(Component? component) {
-    if (MainWindow_Properties_Grid.Children.Count == 0) {
-    return;
-    }
+    private void CreateComponentUI( Component? component ) {
+        if( MainWindow_Properties_Grid.Children.Count == 0 ) {
+            return;
+        }
 
-    if (MainWindow_Properties_Grid.Children[0] is ComponentProperties) {
-    return;
-    }
+        if( MainWindow_Properties_Grid.Children[0] is ComponentProperties ) {
+            return;
+        }
 
-    MainWindow_Properties_Grid.Children.Clear();
-    var componentUI = new ComponentProperties();
-    var viewModel = new ComponentPropertiesViewModel();
-    if (component != null) {
-    //viewModel.Component = component;
-    }
-    componentUI.DataContext = viewModel;
-    MainWindow_Properties_Grid.Children.Add(componentUI);
+        MainWindow_Properties_Grid.Children.Clear( );
+        var componentUI = new ComponentProperties();
+        if( component != null ) {
+            //viewModel.Component = component;
+        }
+        MainWindow_Properties_Grid.Children.Add(componentUI);
     }
 }

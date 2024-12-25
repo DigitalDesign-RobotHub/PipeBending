@@ -1,11 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Media;
+﻿using System.Windows.Controls;
 
 using IMKernel.Visualization;
 
@@ -21,23 +14,23 @@ namespace PipeBendingUI.View;
 /// OCCViewUserControl.xaml 的交互逻辑
 /// </summary>
 public partial class OCCViewUserControl:UserControl, IAISSelectionHandler {
-    public readonly OCCViewViewModel model;
-    public occView occView => model.OccCanvas.View;
+	public readonly OCCViewViewModel model;
+	public occView occView => model.OccCanvas.View;
 
-    public OCCViewUserControl() {
-    InitializeComponent();
+	public OCCViewUserControl( ) {
+		InitializeComponent( );
 
-    model = new();
-    OCCCanvas_WindowsFormsHost.Child = model.OccCanvas;
-    //注册鼠标事件
-    model.OccCanvas.OnAISSelectionEvent += OnAISSelection;
-    // 注册 SizeChanged 事件
-    this.SizeChanged += (s, e) => {
-    model.Width = this.ActualWidth;
-    model.Height = this.ActualHeight;
-    };
-    DataContext = model;
-    }
+		model = new( );
+		OCCCanvas_WindowsFormsHost.Child = model.OccCanvas;
+		//注册鼠标事件
+		model.OccCanvas.OnAISSelectionEvent += OnAISSelection;
+		// 注册 SizeChanged 事件
+		this.SizeChanged += ( s, e ) => {
+			model.Width = this.ActualWidth;
+			model.Height = this.ActualHeight;
+		};
+		DataContext = model;
+	}
 
-    public void OnAISSelection(AShape theAIS) { }
+	public void OnAISSelection( AShape theAIS ) { }
 }
