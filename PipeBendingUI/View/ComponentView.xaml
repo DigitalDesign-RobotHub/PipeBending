@@ -1,0 +1,17 @@
+﻿<UserControl
+  x:Class="PipeBendingUI.View.ComponentView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:kernelView="clr-namespace:IMKernelUI.View;assembly=IMKernelUI"
+  xmlns:kernelViewModel="clr-namespace:IMKernelUI.ViewModel;assembly=IMKernelUI"
+  xmlns:local="clr-namespace:PipeBendingUI.View"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  d:Background="LightBlue"
+  d:DesignHeight="800"
+  d:DesignWidth="400"
+  mc:Ignorable="d">
+  <Grid>
+    <kernelView:ComponentPropertiesView DataContext="{Binding kernelViewModel:ComponentPropertiesViewModel}" />
+  </Grid>
+</UserControl>

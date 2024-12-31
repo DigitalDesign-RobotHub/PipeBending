@@ -19,10 +19,10 @@ public partial class OCCViewUserControl:UserControl, IAISSelectionHandler {
 
 	public OCCViewUserControl( ) {
 		InitializeComponent( );
-
+		//绑定From
 		model = new( );
 		OCCCanvas_WindowsFormsHost.Child = model.OccCanvas;
-		//注册鼠标事件
+		//注册点击事件
 		model.OccCanvas.OnAISSelectionEvent += OnAISSelection;
 		// 注册 SizeChanged 事件
 		this.SizeChanged += ( s, e ) => {

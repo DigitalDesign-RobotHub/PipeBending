@@ -11,7 +11,7 @@
   xmlns:view="clr-namespace:PipeBendingUI.View"
   xmlns:viewmodel="clr-namespace:PipeBendingUI.ViewModel"
   Title="MainWindow"
-  Width="2400"
+  Width="1400"
   Height="1200"
   WindowStartupLocation="CenterScreen">
   <dx:ThemedWindow.DataContext>
@@ -78,7 +78,7 @@
           </dxr:RibbonPageGroup>
           <!--  三维操作  -->
           <dxr:RibbonPageGroup x:Name="MainPage_ThreeDOperation_RibbonPageGroup" Caption="三维操作">
-            <dxr:BarButtonGroup RibbonStyle="SmallWithoutText">
+            <dxr:BarButtonGroup RibbonStyle="SmallWithText">
               <dxb:BarButtonItem
                 x:Name="MainPage_ThreeDOperation_FrontView_Button"
                 Command="{Binding FrontViewCommand}"
@@ -117,10 +117,22 @@
             </dxr:BarButtonGroup>
           </dxr:RibbonPageGroup>
           <dxr:RibbonPageGroup x:Name="MainPage_ThreeDStatus_RibbonPageGroup" Caption="画布">
-            <dxb:BarCheckItem Glyph="{dx:DXImage SvgImages/Business Objects/BO_Localization.svg}" IsChecked="{Binding IsShowOriginTrihedron}" />
-            <dxb:BarCheckItem Glyph="{dx:DXImage SvgImages/Business Objects/BO_Localization.svg}" IsChecked="{Binding IsShowViewTrihedron}" />
-            <dxb:BarCheckItem Glyph="{dx:DXImage SvgImages/Business Objects/BO_Localization.svg}" IsChecked="{Binding IsShowViewCube}" />
-            <dxb:BarCheckItem Glyph="{dx:DXImage SvgImages/Business Objects/BO_Localization.svg}" IsChecked="{Binding IsShowGraduatedTrihedron}" />
+            <dxb:BarCheckItem
+              Content="原点坐标轴"
+              Glyph="{dx:DXImage SvgImages/Business Objects/BO_Localization.svg}"
+              IsChecked="{Binding IsShowOriginTrihedron}" />
+            <dxb:BarCheckItem
+              Content="窗口坐标轴"
+              Glyph="{dx:DXImage SvgImages/Business Objects/BO_Localization.svg}"
+              IsChecked="{Binding IsShowViewTrihedron}" />
+            <dxb:BarCheckItem
+              Content="视图立方"
+              Glyph="{dx:DXImage SvgImages/Business Objects/BO_Localization.svg}"
+              IsChecked="{Binding IsShowViewCube}" />
+            <dxb:BarCheckItem
+              Content="标尺坐标轴"
+              Glyph="{dx:DXImage SvgImages/Business Objects/BO_Localization.svg}"
+              IsChecked="{Binding IsShowGraduatedTrihedron}" />
           </dxr:RibbonPageGroup>
         </dxr:RibbonPage>
         <!--  工作空间选项卡  -->
