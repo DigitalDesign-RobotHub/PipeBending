@@ -30,6 +30,9 @@ public class ThreeDimensionContextManager {
 		IsShowOriginTrihedron = false;
 		IsShowViewTrihedron = false;
 		IsShowGraduatedTrihedron = false;
+		WeakReferenceMessenger.Default.Register<Main3DContextRequestMessage>(this, ( r, m ) => {
+			m.Reply(MainContext);
+		});
 	}
 
 	public bool IsShowViewCube { get; set; }
@@ -56,6 +59,9 @@ public class ThreeDimensionContextManager {
 			//创建三维画布上下文对象
 			context = new(anAISContext, contextID);
 			Contexts.Add(context);
+			if( Contexts.Count == 1 ) {
+				WeakReferenceMessenger.Default.Send(new Main3DContextChangedMessage(context));
+			}
 		} catch( Exception e ) {
 			throw new Exception($"画布创建失败：{e}");
 		}

@@ -21,28 +21,35 @@ public partial class RibbonControlViewModel:ObservableObject {
 
 	private static readonly Singleton.CommandManager commandManager = App.Current.CommandManager;
 	private static ThreeDimensionContext? threeDimensionContext => App.Current.ThreeDimensionContextManager.MainContext;
-	private OCCCanvas mainView;
+
+	private OCCCanvas mainCanvas;
 
 	public RibbonControlViewModel( ) {
+
 		VisibilityControl( ); //权限控制
 		CreateNewComponentCommand = new CreateNewComponent( ); //创建新部件
 		CreateNewRobotCommand = new CreateNewComponent( ); //todo 创建新机器人
+
 		WeakReferenceMessenger.Default.Register<CanvasCreatedMessage>(this, ( r, m ) => {
 			if( m.Value.contextID != 0 ) {
 				return;
 			}
 			//创建画布
-			mainView = threeDimensionContext?.CreateView(commandManager) ?? throw new Exception("创建画布失败");
+			mainCanvas = threeDimensionContext?.CreateView(commandManager) ?? throw new Exception("创建画布失败");
 			IsShowOriginTrihedron = m.Value.orignTri;
 			IsShowViewTrihedron = m.Value.viewTri;
 			IsShowViewCube = m.Value.viewCube;
 			IsShowGraduatedTrihedron = false;
 		});
+
 		WeakReferenceMessenger.Default.Register<RibbonControlViewModel, MainCanvasRequestMessage>(this, ( r, m ) => {
-			m.Reply(r.mainView);
+			m.Reply(r.mainCanvas);
 		}
 		);
+
 	}
+	#region 画布控制
+
 
 	[ObservableProperty]
 	private bool isShowOriginTrihedron;
@@ -74,13 +81,17 @@ public partial class RibbonControlViewModel:ObservableObject {
 	#region 刻度坐标系
 	public void DisplayGraduatedTrihedron( bool showGraduatedTrihedron ) {
 		if( showGraduatedTrihedron ) {
-			mainView.View.DisplayDefault_GraduatedTrihedron( );
+			mainCanvas.View.DisplayDefault_GraduatedTrihedron( );
 		} else {
-			mainView.View.Hide_GraduatedTrihedron( );
+			mainCanvas.View.Hide_GraduatedTrihedron( );
 		}
-		mainView.Update( );
+		mainCanvas.Update( );
 	}
 	#endregion
+
+	#endregion
+
+	#region Command
 
 	[RelayCommand]
 	private void Undo( ) => App.Current.CommandManager.Undo( );
@@ -89,26 +100,29 @@ public partial class RibbonControlViewModel:ObservableObject {
 	public ICommand CreateNewRobotCommand { get; }
 
 	[RelayCommand]
-	private void FrontView( ) => commandManager.Execute(new FrontViewCommand( ), mainView.View);
+	private void FrontView( ) => commandManager.Execute(new FrontViewCommand( ), mainCanvas.View);
 
 	[RelayCommand]
-	private void BackView( ) => commandManager.Execute(new BackViewCommand( ), mainView.View);
+	private void BackView( ) => commandManager.Execute(new BackViewCommand( ), mainCanvas.View);
 
 	[RelayCommand]
-	private void TopView( ) => commandManager.Execute(new TopViewCommand( ), mainView.View);
+	private void TopView( ) => commandManager.Execute(new TopViewCommand( ), mainCanvas.View);
 
 	[RelayCommand]
-	private void BottomView( ) => commandManager.Execute(new BottomViewCommand( ), mainView.View);
+	private void BottomView( ) => commandManager.Execute(new BottomViewCommand( ), mainCanvas.View);
 
 	[RelayCommand]
-	private void LeftView( ) => commandManager.Execute(new LeftViewCommand( ), mainView.View);
+	private void LeftView( ) => commandManager.Execute(new LeftViewCommand( ), mainCanvas.View);
 
 	[RelayCommand]
-	private void RightView( ) => commandManager.Execute(new RightViewCommand( ), mainView.View);
+	private void RightView( ) => commandManager.Execute(new RightViewCommand( ), mainCanvas.View);
 
 	[RelayCommand]
-	private void AxoView( ) => commandManager.Execute(new AxoViewCommand( ), mainView.View);
+	private void AxoView( ) => commandManager.Execute(new AxoViewCommand( ), mainCanvas.View);
 
 	[RelayCommand]
-	private void FitAll( ) => commandManager.Execute(new FitAllCommand( ), mainView.View);
+	private void FitAll( ) => commandManager.Execute(new FitAllCommand( ), mainCanvas.View);
+
+	#endregion
+
 }

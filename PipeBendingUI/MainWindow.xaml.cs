@@ -1,16 +1,15 @@
-﻿using System.Collections.Generic;
-
-using CommunityToolkit.Mvvm.Messaging;
+﻿using CommunityToolkit.Mvvm.Messaging;
 
 using DevExpress.Xpf.Core;
 using DevExpress.Xpf.Ribbon;
-using DevExpress.XtraSpreadsheet.Model;
 
 using IMKernel.Model;
 
 using IMKernelUI.View;
+using IMKernelUI.ViewModel;
 
 using PipeBendingUI.Message;
+using PipeBendingUI.View;
 using PipeBendingUI.ViewModel;
 
 namespace PipeBendingUI;
@@ -23,13 +22,15 @@ public partial class MainWindow:ThemedWindow {
 		InitializeComponent( );
 
 		#region Message
-		// 创建Component窗口
-		WeakReferenceMessenger.Default.Register<ComponentChangedMessage>(
+
+		// 修改原有部件
+		WeakReferenceMessenger.Default.Register<ComponentChangingMessage>(
 			this,
 			( r, m ) => {
-				CreateComponentUI(m.Value);
+				CreateComponentUI(m.OldComponent);
 			}
 		);
+
 		//删除Properties窗口
 		WeakReferenceMessenger.Default.Register<PropertiesUIFinishedMessage>(
 			this,
@@ -45,6 +46,7 @@ public partial class MainWindow:ThemedWindow {
 				);
 			}
 		);
+
 		#endregion
 
 		var ribbonControl = this.FindName("RibbonControl") as RibbonControl;
@@ -54,21 +56,17 @@ public partial class MainWindow:ThemedWindow {
 	/// 创建或保存新部件
 	/// </summary>
 	/// <param name="component"></param>
-	private void CreateComponentUI( Component? component ) {
-		if( MainWindow_Properties_Grid.Children.Count == 0 ) {
-			return;
-		}
-
-		if( MainWindow_Properties_Grid.Children[0] is ComponentPropertiesView ) {
+	private void CreateComponentUI( ComponentInstance? component = null ) {
+		if( MainWindow_Properties_Grid.Children.Count != 0 && MainWindow_Properties_Grid.Children[0] is ComponentViewModel ) {
 			return;
 		}
 
 		MainWindow_Properties_Grid.Children.Clear( );
-		var componentUI = new ComponentPropertiesView(){ DataContext=new ComponentPropertiesViewModel()};
+		var componentUI = new ComponentView(){ DataContext=new ComponentViewModel()};
 
 		if( component != null ) {
-			var a=(ComponentPropertiesViewModel)componentUI.DataContext;
-			a.Component = component;
+			var a=(ComponentViewModel)componentUI.DataContext;
+			a.TheComponent = component ?? throw new System.Exception("传入了空部件");
 		}
 		MainWindow_Properties_Grid.Children.Add(componentUI);
 	}

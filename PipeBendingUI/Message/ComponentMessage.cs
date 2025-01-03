@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace PipeBendingUI.Message;
 
-namespace PipeBendingUI.Message;
+/// <summary>
+/// 关闭并删除属性窗口UI消息
+/// </summary>
 public record PropertiesUIFinishedMessage( );

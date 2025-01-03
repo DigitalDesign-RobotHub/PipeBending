@@ -1,4 +1,6 @@
-﻿namespace PipeBendingUI.Message;
+﻿using IMKernel.Model;
 
-public record ComponentChangedMessage( IMKernel.Model.Component? Value );
+namespace PipeBendingUI.Message;
+
+public record ComponentChangingMessage( ComponentInstance? OldComponent );
 

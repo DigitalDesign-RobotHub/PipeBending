@@ -27,64 +27,55 @@ namespace PipeBendingUI.ViewModel;
 
 public partial class ComponentViewModel:ObservableObject, IOCCFinilize {
 	public ComponentViewModel( ) {
-		canvas = WeakReferenceMessenger.Default.Send<MainCanvasRequestMessage>( );
+		//value
+		Name = "新部件";
 		CreateComponentState = Visibility.Visible;
 		SaveComponentState = Visibility.Collapsed;
 		IsAddToWorkSpace = false;
-		DefaultMovements = new( )
-		{
-			MovementFormula.Static,
-			MovementFormula.dX_Plus,
-			MovementFormula.dX_Minus,
-			MovementFormula.dY_Plus,
-			MovementFormula.dY_Minus,
-			MovementFormula.dZ_Plus,
-			MovementFormula.dZ_Minus,
-			MovementFormula.rX_Plus,
-			MovementFormula.rX_Minus,
-			MovementFormula.rY_Plus,
-			MovementFormula.rY_Minus,
-			MovementFormula.rZ_Plus,
-			MovementFormula.rZ_Minus,
-		};
-		TheComponentVM = new( ) { DefaultMovements = DefaultMovements };
+		ComponentVM = new( );
 	}
 
-	public Component Component {
+	public ComponentInstance TheComponent {
+		get {
+			return new(Name, ComponentVM.TheComponent);
+		}
 		set {
-			Connection = value.Connection;
-			TheComponentVM.Component = value;
+			if( value != null ) {
+				ComponentVM.TheComponent = value.Component;
+				Name = value.Name;
+			}
 		}
 	}
 
 	public bool IsComponentValid {
 		get {
-			if( TheComponentVM.Name == "" || TheComponentVM.Name == null || TheComponentVM.MovementFormula == null ) {
+			if( ComponentVM.Name == "" || ComponentVM.Name == null ) {
 				return false;
 			}
 			return true;
 		}
 	}
 
-	#region 属性和字段
-	private OCCCanvas? canvas;
-	[ObservableProperty]
-	private ComponentPropertiesViewModel theComponentVM;
+	#region OCC
 
-	public ObservableCollection<Trsf> Connection { get; set; }
-
+	//private OCCCanvas? canvas;
 
 	#endregion
+
+	#region Value
+
+	[ObservableProperty]
+	private string name;
+
+	[ObservableProperty]
+	private ComponentPropertiesViewModel componentVM;
 
 	/// <summary>
 	/// 可选为父部件的部件集合
 	/// </summary>
 	public ObservableCollection<Component> Components { protected get; set; }
 
-	/// <summary>
-	/// 可选的运动方向
-	/// </summary>
-	public List<MovementFormula> DefaultMovements { get; }
+	#endregion
 
 	public Visibility CreateComponentState { get; set; }
 
@@ -93,7 +84,7 @@ public partial class ComponentViewModel:ObservableObject, IOCCFinilize {
 
 	[RelayCommand(CanExecute = nameof(IsComponentValid))]
 	private void CreateComponent( ) {
-		App.Current.CommandManager.Execute(new CreateComponentCommand( ), (TheComponentVM.TheComponent, IsAddToWorkSpace));
+		App.Current.CommandManager.Execute(new CreateComponentCommand( ), (ComponentVM.TheComponent, IsAddToWorkSpace));
 	}
 
 	public Visibility SaveComponentState { get; set; }
@@ -101,16 +92,21 @@ public partial class ComponentViewModel:ObservableObject, IOCCFinilize {
 	[RelayCommand]
 	private void SaveComponent( ) {
 		//App.Current.CommandManager.Execute(new SaveComponentCommand(), component);
-		TheComponentVM.OCCFinilize( );
+		ComponentVM.OCCFinilize( );
 	}
 
 	[RelayCommand]
-	private void CancerComponent( ) {
+	private void CancelComponent( ) {
 		WeakReferenceMessenger.Default.Send(new PropertiesUIFinishedMessage( ));
-		TheComponentVM.OCCFinilize( );
+		ComponentVM.OCCFinilize( );
 	}
 
+	#region OCC
+
 	public void OCCFinilize( ) {
-		TheComponentVM.OCCFinilize( );
+		ComponentVM.OCCFinilize( );
 	}
+
+	#endregion
+
 }

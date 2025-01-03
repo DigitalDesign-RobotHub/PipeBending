@@ -8,15 +8,17 @@
   xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
   xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
   xmlns:dxr="http://schemas.devexpress.com/winfx/2008/xaml/ribbon"
+  xmlns:model="clr-namespace:PipeBendingUI.ViewModel"
   xmlns:view="clr-namespace:PipeBendingUI.View"
-  xmlns:viewmodel="clr-namespace:PipeBendingUI.ViewModel"
-  Title="MainWindow"
+  Title="PipeBending"
   Width="1400"
   Height="1200"
+  FontSize="{DynamicResource GlobalFontSize}"
   WindowStartupLocation="CenterScreen">
   <dx:ThemedWindow.DataContext>
-    <viewmodel:RibbonControlViewModel />
+    <model:RibbonControlViewModel />
   </dx:ThemedWindow.DataContext>
+  <!--  快捷键  -->
   <dx:ThemedWindow.InputBindings>
     <!--#region 定义快捷键组合-->
     <!--  Ctrl+Z  -->
@@ -26,6 +28,7 @@
       Modifiers="Control" />
     <!--#endregion-->
   </dx:ThemedWindow.InputBindings>
+
   <DockPanel>
     <!--  顶部 Ribbon  -->
     <dxr:RibbonControl DockPanel.Dock="Top" RibbonStyle="Office2019">

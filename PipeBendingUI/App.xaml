@@ -5,8 +5,10 @@
   <Application.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <!--  引用 IMKernel 的资源字典  -->
-        <ResourceDictionary Source="pack://application:,,,/IMKernelUI;component/Resources/Icon.xaml" />
+        <!--  自身的资源字典  -->
+        <ResourceDictionary Source="Resources/GlobalResources.xaml" />
+        <!--  引用 IMKernelUI 的资源字典  -->
+        <ResourceDictionary Source="pack://application:,,,/IMKernelUI;component/Properties/DesignTimeResources.xaml" />
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Application.Resources>

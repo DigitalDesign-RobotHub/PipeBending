@@ -3,15 +3,57 @@
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
   xmlns:kernelView="clr-namespace:IMKernelUI.View;assembly=IMKernelUI"
   xmlns:kernelViewModel="clr-namespace:IMKernelUI.ViewModel;assembly=IMKernelUI"
   xmlns:local="clr-namespace:PipeBendingUI.View"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:model="clr-namespace:PipeBendingUI.ViewModel;assembly=PipeBendingUI"
   d:Background="LightBlue"
-  d:DesignHeight="800"
+  d:DataContext="{d:DesignInstance Type=model:ComponentViewModel}"
   d:DesignWidth="400"
   mc:Ignorable="d">
-  <Grid>
-    <kernelView:ComponentPropertiesView DataContext="{Binding kernelViewModel:ComponentPropertiesViewModel}" />
-  </Grid>
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/IMKernelUI;component/Properties/DesignTimeResources.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel>
+      <kernelView:ComponentPropertiesView DataContext="{Binding ComponentVM}" />
+
+      <!--#region 交互按钮-->
+      <dxlc:LayoutGroup Margin="0,4,0,0" Orientation="Vertical">
+        <dxlc:LayoutItem Padding="6,0,2,0">
+          <CheckBox Content="加入到工作空间" IsChecked="{Binding IsAddToWorkSpace}" />
+        </dxlc:LayoutItem>
+        <dxlc:LayoutGroup>
+          <dxlc:LayoutItem Visibility="{Binding CreateComponentState}">
+            <Button
+              Command="{Binding}"
+              Content="创建"
+              Style="{StaticResource OK_Button_Style}" />
+          </dxlc:LayoutItem>
+          <dxlc:LayoutItem Visibility="{Binding SaveComponentState}">
+            <Button
+              Command="{Binding CreateComponentCommand}"
+              Content="应用"
+              Style="{StaticResource OK_Button_Style}" />
+          </dxlc:LayoutItem>
+          <dxlc:LayoutItem>
+            <Button
+              Command="{Binding CancelComponentCommand}"
+              Content="取消"
+              Style="{StaticResource Cancel_Button_Style}" />
+          </dxlc:LayoutItem>
+        </dxlc:LayoutGroup>
+      </dxlc:LayoutGroup>
+
+      <!--#endregion-->
+    </StackPanel>
+  </ScrollViewer>
 </UserControl>
