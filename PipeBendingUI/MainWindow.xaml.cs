@@ -66,7 +66,7 @@ public partial class MainWindow:ThemedWindow {
 
 		if( component != null ) {
 			var a=(ComponentViewModel)componentUI.DataContext;
-			a.TheComponent = component ?? throw new System.Exception("传入了空部件");
+			a.TheComponentInstance = component ?? throw new System.Exception("传入了空部件");
 		}
 		MainWindow_Properties_Grid.Children.Add(componentUI);
 	}

@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
-using IMKernel.Command;
+using IMKernelUI.Command;
 using IMKernel.Visualization;
 
 using IMKernelUI.Message;

@@ -11,7 +11,7 @@ using CommunityToolkit.Mvvm.Input;
 using DevExpress.Charts.Native;
 using DevExpress.XtraRichEdit.Import.Doc;
 
-using IMKernel.Command;
+using IMKernelUI.Command;
 using IMKernel.Visualization;
 
 using log4net;

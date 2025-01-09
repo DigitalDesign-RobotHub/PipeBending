@@ -13,8 +13,9 @@ using DevExpress.Charts.Native;
 using DevExpress.CodeParser;
 using DevExpress.Utils.Extensions;
 
-using IMKernel.Interfaces;
 using IMKernel.Model;
+
+using IMKernelUI.Interfaces;
 
 using log4net;
 
@@ -47,6 +48,10 @@ public abstract class ComponentPropertiesUndoCommand:IUndoCommand {
 	public abstract bool CanExecute( object? parameter );
 
 	public abstract void Execute( object? parameter );
+
+	public void NotifyCanExecuteChanged( ) {
+		throw new NotImplementedException( );
+	}
 
 	public abstract void Undo( );
 }

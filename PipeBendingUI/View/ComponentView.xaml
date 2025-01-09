@@ -12,6 +12,7 @@
   d:Background="LightBlue"
   d:DataContext="{d:DesignInstance Type=model:ComponentViewModel}"
   d:DesignWidth="400"
+  d:FontSize="20"
   mc:Ignorable="d">
   <UserControl.Resources>
     <ResourceDictionary>
@@ -28,20 +29,20 @@
 
       <!--#region 交互按钮-->
       <dxlc:LayoutGroup Margin="0,4,0,0" Orientation="Vertical">
-        <dxlc:LayoutItem Padding="6,0,2,0">
+        <dxlc:LayoutItem Padding="6,0,2,0" Visibility="{Binding CreateComponentState}">
           <CheckBox Content="加入到工作空间" IsChecked="{Binding IsAddToWorkSpace}" />
         </dxlc:LayoutItem>
         <dxlc:LayoutGroup>
           <dxlc:LayoutItem Visibility="{Binding CreateComponentState}">
             <Button
-              Command="{Binding}"
+              Command="{Binding CreateComponentCommand}"
               Content="创建"
               Style="{StaticResource OK_Button_Style}" />
           </dxlc:LayoutItem>
-          <dxlc:LayoutItem Visibility="{Binding SaveComponentState}">
+          <dxlc:LayoutItem Visibility="{Binding ChangingComponentState}">
             <Button
               Command="{Binding CreateComponentCommand}"
-              Content="应用"
+              Content="修改并保存"
               Style="{StaticResource OK_Button_Style}" />
           </dxlc:LayoutItem>
           <dxlc:LayoutItem>
@@ -56,4 +57,5 @@
       <!--#endregion-->
     </StackPanel>
   </ScrollViewer>
+
 </UserControl>

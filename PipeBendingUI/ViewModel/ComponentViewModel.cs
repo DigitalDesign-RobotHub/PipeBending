@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -7,35 +6,44 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
 using IMKernel.Model;
-using IMKernel.OCCExtension;
-using IMKernel.Visualization;
 
+using IMKernelUI.Interfaces;
 using IMKernelUI.ViewModel;
-
-using OCCTK.Extension;
-using OCCTK.OCC.gp;
 
 using PipeBendingUI.Command;
 using PipeBendingUI.Message;
-using IMKernelUI.Message;
 
 using Component = IMKernel.Model.Component;
-using IMKernelUI.Interfaces;
-using IMKernel.Kinematic;
 
 namespace PipeBendingUI.ViewModel;
 
 public partial class ComponentViewModel:ObservableObject, IOCCFinilize {
 	public ComponentViewModel( ) {
 		//value
-		Name = "新部件";
+		Name = "新部件实例";
 		CreateComponentState = Visibility.Visible;
-		SaveComponentState = Visibility.Collapsed;
+		ChangingComponentState = Visibility.Collapsed;
+		Components = new( );
 		IsAddToWorkSpace = false;
 		ComponentVM = new( );
 	}
 
-	public ComponentInstance TheComponent {
+	#region OCC
+
+	//private OCCCanvas? canvas;
+
+	public void OCCFinilize( ) {
+		ComponentVM.OCCFinilize( );
+	}
+
+	#endregion
+
+	#region Value
+
+	/// <summary>
+	/// VM对应的部件实例对象
+	/// </summary>
+	public ComponentInstance TheComponentInstance {
 		get {
 			return new(Name, ComponentVM.TheComponent);
 		}
@@ -46,23 +54,6 @@ public partial class ComponentViewModel:ObservableObject, IOCCFinilize {
 			}
 		}
 	}
-
-	public bool IsComponentValid {
-		get {
-			if( ComponentVM.Name == "" || ComponentVM.Name == null ) {
-				return false;
-			}
-			return true;
-		}
-	}
-
-	#region OCC
-
-	//private OCCCanvas? canvas;
-
-	#endregion
-
-	#region Value
 
 	[ObservableProperty]
 	private string name;
@@ -77,17 +68,43 @@ public partial class ComponentViewModel:ObservableObject, IOCCFinilize {
 
 	#endregion
 
-	public Visibility CreateComponentState { get; set; }
+	#region View
 
+	/// <summary>
+	/// 是否满足创建部件的条件
+	/// </summary>
+	public bool IsComponentValid {
+		get {
+			if( ComponentVM.Name == "" || ComponentVM.Name == null ) {
+				return false;
+			}
+			return true;
+		}
+	}
+
+	//同一个View同时用于创建新部件实例和修改既有部件实例
+
+	/// <summary>
+	/// 是否在创建的同时加入工作空间树
+	/// </summary>
 	[ObservableProperty]
 	private bool isAddToWorkSpace;
+
+	/// <summary>
+	/// 创建新部件
+	/// </summary>
+	public Visibility CreateComponentState { get; set; }
+
 
 	[RelayCommand(CanExecute = nameof(IsComponentValid))]
 	private void CreateComponent( ) {
 		App.Current.CommandManager.Execute(new CreateComponentCommand( ), (ComponentVM.TheComponent, IsAddToWorkSpace));
 	}
 
-	public Visibility SaveComponentState { get; set; }
+	/// <summary>
+	/// 修改部件
+	/// </summary>
+	public Visibility ChangingComponentState { get; set; }
 
 	[RelayCommand]
 	private void SaveComponent( ) {
@@ -98,12 +115,6 @@ public partial class ComponentViewModel:ObservableObject, IOCCFinilize {
 	[RelayCommand]
 	private void CancelComponent( ) {
 		WeakReferenceMessenger.Default.Send(new PropertiesUIFinishedMessage( ));
-		ComponentVM.OCCFinilize( );
-	}
-
-	#region OCC
-
-	public void OCCFinilize( ) {
 		ComponentVM.OCCFinilize( );
 	}
 

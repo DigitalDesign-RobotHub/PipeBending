@@ -79,6 +79,7 @@ public partial class App:Application {
 	[STAThread]
 	protected override void OnStartup( StartupEventArgs e ) {
 		base.OnStartup(e);
+
 		#region TEST
 		//测试权限(正常情况下应该通过启动页加载权限)
 		var robot = new RobotPageGroupAuthority() { IsVisible = false }; //关闭机器人组权限
