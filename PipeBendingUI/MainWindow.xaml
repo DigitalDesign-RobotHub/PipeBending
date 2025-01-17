@@ -28,7 +28,6 @@
       Modifiers="Control" />
     <!--#endregion-->
   </dx:ThemedWindow.InputBindings>
-
   <DockPanel>
     <!--  顶部 Ribbon  -->
     <dxr:RibbonControl DockPanel.Dock="Top" RibbonStyle="Office2019">
