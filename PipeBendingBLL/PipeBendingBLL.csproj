@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove=".gitignore" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\CSharpOCCToolKit\CSharpOCCToolKit.vcxproj" />
     <ProjectReference Include="..\..\IMKernel\IMKernel.csproj" />
     <ProjectReference Include="..\PipeBendingDAL\PipeBendingDAL.csproj" />
