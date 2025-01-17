@@ -1,0 +1,22 @@
+# Visual Studio 文件
+*.user
+*.suo
+*.vcxproj.user
+*.ncb
+*.log
+*.sdf
+*.opensdf
+*.opendb
+*.tlog
+*.pdb
+
+# 编译生成的文件
+bin/
+obj/
+Debug/
+Release/
+
+# 临时文件
+*.tmp
+*.cache
+*.ide
