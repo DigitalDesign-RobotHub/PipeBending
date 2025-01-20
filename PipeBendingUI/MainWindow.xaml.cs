@@ -57,7 +57,7 @@ public partial class MainWindow:ThemedWindow {
 	/// </summary>
 	/// <param name="component"></param>
 	private void CreateComponentUI( ComponentInstance? component = null ) {
-		if( MainWindow_Properties_Grid.Children.Count != 0 && MainWindow_Properties_Grid.Children[0] is ComponentViewModel ) {
+		if( MainWindow_Properties_Grid.Children.Count != 0 && MainWindow_Properties_Grid.Children[0] is ComponentView) {
 			return;
 		}
 
