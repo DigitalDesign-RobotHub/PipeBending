@@ -10,6 +10,8 @@ using IMKernel.Model;
 using IMKernelUI.Interfaces;
 using IMKernelUI.ViewModel;
 
+using log4net;
+
 using PipeBendingUI.Command;
 using PipeBendingUI.Message;
 
@@ -18,6 +20,7 @@ using Component = IMKernel.Model.Component;
 namespace PipeBendingUI.ViewModel;
 
 public partial class ComponentViewModel:ObservableObject, IOCCFinilize {
+	private static readonly ILog log = LogManager.GetLogger(typeof(ComponentViewModel));
 	public ComponentViewModel( ) {
 		//value
 		Name = "新部件实例";

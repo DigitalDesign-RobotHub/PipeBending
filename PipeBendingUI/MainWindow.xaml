@@ -11,7 +11,7 @@
   xmlns:model="clr-namespace:PipeBendingUI.ViewModel"
   xmlns:view="clr-namespace:PipeBendingUI.View"
   Title="PipeBending"
-  Width="1400"
+  Width="1800"
   Height="1200"
   FontSize="{DynamicResource GlobalFontSize}"
   WindowStartupLocation="CenterScreen">
