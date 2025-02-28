@@ -14,6 +14,11 @@ using log4net;
 using System;
 using PipeBendingUI.Command;
 using PipeBendingUI.Message;
+using OCCTK.OCC.gp;
+using IMKernel.OCCExtension.Serialization;
+using IMKernel.OCCExtension;
+using System.Diagnostics;
+using Newtonsoft.Json;
 namespace PipeBendingUI.ViewModel;
 
 public partial class RibbonControlViewModel:ObservableObject {
@@ -92,6 +97,23 @@ public partial class RibbonControlViewModel:ObservableObject {
 	#endregion
 
 	#region Command
+	[RelayCommand]
+	private void Test01( ) {
+		Trsf t=new();
+		t.SetTranslationPart(new(4, 3, 9));
+		var q=new Quat(90.0.ToRadians(),45.0.ToRadians(),15.0.ToRadians(),EulerSequence.Extrinsic_XYZ);
+		t.SetRotationPart(q);
+
+		log.Debug("序列化Trsf");
+		log.Debug(t);
+		log.Debug("Json");
+		string json = JsonConvert.SerializeObject(t, Formatting.Indented, new TrsfJsonConverter());
+		log.Debug(json);
+
+		Trsf t2 = JsonConvert.DeserializeObject<Trsf>(json, new TrsfJsonConverter())?? throw new Exception("转换失败");
+		log.Debug("反序列化Trsf");
+		log.Debug(t2);
+	}
 
 	[RelayCommand]
 	private void Undo( ) => App.Current.CommandManager.Undo( );

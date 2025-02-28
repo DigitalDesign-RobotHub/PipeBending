@@ -130,7 +130,7 @@ public partial class WorkSpaceTreeUserControl : UserControl
     //    {
     //        // 交换节点顺序
     //        dataSource.Move(draggedIndex, targetIndex);
-    //        log.Info($"拖放成功: {draggedNode.Name} 和 {targetNode.Name} 交换顺序");
+    //        log.Info($"拖放成功: {draggedNode.NameString} 和 {targetNode.NameString} 交换顺序");
     //    }
 
     //    e.Handled = true;

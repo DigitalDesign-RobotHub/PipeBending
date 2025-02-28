@@ -11,7 +11,7 @@
   xmlns:model="clr-namespace:PipeBendingUI.ViewModel"
   xmlns:view="clr-namespace:PipeBendingUI.View"
   Title="PipeBending"
-  Width="1400"
+  Width="1800"
   Height="1200"
   FontSize="{DynamicResource GlobalFontSize}"
   WindowStartupLocation="CenterScreen">
@@ -77,6 +77,13 @@
               Content="Undo"
               Glyph="{dx:DXImage SvgImages/Icon Builder/Actions_Undo.svg}"
               LargeGlyph="{dx:DXImage SvgImages/Icon Builder/Actions_Undo.svg}" />
+          </dxr:RibbonPageGroup>
+          <!--  Test  -->
+          <dxr:RibbonPageGroup x:Name="Test_RibbonPageGroup" Caption="Test">
+            <dxb:BarButtonItem
+              Command="{Binding Test01Command}"
+              Content="测试1"
+              Glyph="{dx:DXImage SvgImages/Dashboards/ScatterChartLabelOptions.svg}" />
           </dxr:RibbonPageGroup>
           <!--  三维操作  -->
           <dxr:RibbonPageGroup x:Name="MainPage_ThreeDOperation_RibbonPageGroup" Caption="三维操作">
