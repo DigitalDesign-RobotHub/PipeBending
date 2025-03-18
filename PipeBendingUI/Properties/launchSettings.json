@@ -2,7 +2,8 @@
   "profiles": {
     "PipeBending": {
       "commandName": "Project",
-      "nativeDebugging": false
+      "nativeDebugging": true,
+      "hotReloadEnabled": false
     }
   }
 }

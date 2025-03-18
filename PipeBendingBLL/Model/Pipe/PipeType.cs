@@ -1,7 +1,19 @@
 ﻿namespace PipeBendingBLL.Model.Pipe;
 public enum PipeType {
-	Unknown, // 未知类型
-	Circle, // 圆形管
-	Square, // 方形管
-	Straight, // 直管
+	/// <summary>
+	/// 未知类型
+	/// </summary>
+	Unknown,
+	/// <summary>
+	/// 空心圆形管截面
+	/// </summary>
+	HollowCircle,
+	/// <summary>
+	/// 方形管截面
+	/// </summary>
+	Square,
+	/// <summary>
+	/// 直线管
+	/// </summary>
+	Straight,
 }

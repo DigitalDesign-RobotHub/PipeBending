@@ -6,7 +6,6 @@ using OCCTK.OCC.BRep;
 using OCCTK.OCC.BRepBuilderAPI;
 using OCCTK.OCC.BRepOffsetAPI;
 using OCCTK.OCC.gp;
-using OCCTK.OCC.TopExp;
 using OCCTK.OCC.Topo;
 using OCCTK.OCC.TopoAbs;
 
@@ -25,7 +24,7 @@ public static class ShapeHandler {
 	/// <param name="normal">（可选）圆的法向量，默认为X轴</param>
 	/// <param name="onlyPlane">（可选）是否为平面，默认为true</param>
 	/// <returns>个圆面</returns>
-	public static TShape MakeCircle( decimal radius, Pnt? center = null, Dir? normal = null ) {
+	public static TShape MakeCircleFace( decimal radius, Pnt? center = null, Dir? normal = null ) {
 		#region 参数初始化和参数验证
 		if( radius <= 0 ) {
 			log.Error("创建圆面失败，圆面半径必须大于0。");
@@ -72,45 +71,52 @@ public static class ShapeHandler {
 		return face;
 	}
 
+	/// <summary>
+	/// 合并两条曲线（并处理精度问题）
+	/// </summary>
+	/// <param name="firstShape"></param>
+	/// <param name="secondShape"></param>
+	/// <param name="LinearTolerance">默认精度为 1</param>
+	/// <returns></returns>
 	public static TWire MergeTwoEdges( TWire firstShape, TWire secondShape, double LinearTolerance = 1 ) {
 		var mkWire = new MakeWire();
 		mkWire.Add(firstShape);
 		mkWire.Add(secondShape);
 
-		if( !mkWire.IsDone ) {
-			log.Warn("合并失败");
-			// 合并失败的额外处理
-			var firstShapeExplorer = new Explorer(firstShape, ShapeEnum.VERTEX);
-			bool isOk = false;
-			// 遍历第一个边的顶点
-			while( firstShapeExplorer.More( ) ) {
-				var vertex1 = firstShapeExplorer.Current();
-				var p1 = Tool.Pnt((TVertex)vertex1);
-				Debug.WriteLine($"p1: {p1.X:F4}, {p1.Y:F4}, {p1.Z:F4}");
-				firstShapeExplorer.Next( );
-				var secondShapeExplorer = new Explorer(secondShape, ShapeEnum.VERTEX);
-				while( secondShapeExplorer.More( ) ) {
-					var vertex2 = secondShapeExplorer.Current();    // 遍历得到每一个点
-					var p2 = Tool.Pnt((TVertex)vertex2);
-					log.Warn($"p2-p1:{( p2.X - p1.X ):F4}, {( p2.Y - p1.Y ):F4}, {( p2.Z - p1.Z ):F4}");
-					Debug.WriteLine($"p2 = gp_Pnt({p2.X:F4},{p2.Y:F4},{p2.Z:F4})");
-					secondShapeExplorer.Next( );
-					// 检查两个顶点是否相等
-					if( p1.Equals(p2, LinearTolerance) ) {
-						log.Warn($"p1:{p1.X:F4},{p1.Y:F4},{p1.Z:F4}, p2:{p2.X:F4},{p2.Y:F4},{p2.Z:F4}");
-					}
-					// 如果相等，进行平移变换
-					var theTransformation = new Trsf(new Vec(p2,p1));
-					var myBrepTransformationShape = new Transform(secondShape, theTransformation).Shape();
-					secondShape = (TWire)myBrepTransformationShape;
-					isOk = true;
-					break;
-				}
-				if( isOk ) {
-					break;
-				}
-			}
-		}
+		//if( !mkWire.IsDone ) {
+		//	log.Warn("合并失败");
+		//	// 合并失败的额外处理
+		//	var firstShapeExplorer = new Explorer(firstShape, ShapeEnum.VERTEX);
+		//	bool isOk = false;
+		//	// 遍历第一个边的顶点
+		//	while( firstShapeExplorer.More( ) ) {
+		//		var vertex1 = firstShapeExplorer.Current();
+		//		var p1 = Tool.Pnt((TVertex)vertex1);
+		//		Debug.WriteLine($"p1: {p1.X:F4}, {p1.Y:F4}, {p1.Z:F4}");
+		//		firstShapeExplorer.Next( );
+		//		var secondShapeExplorer = new Explorer(secondShape, ShapeEnum.VERTEX);
+		//		while( secondShapeExplorer.More( ) ) {
+		//			var vertex2 = secondShapeExplorer.Current();    // 遍历得到每一个点
+		//			var p2 = Tool.Pnt((TVertex)vertex2);
+		//			log.Warn($"p2-p1:{( p2.X - p1.X ):F4}, {( p2.Y - p1.Y ):F4}, {( p2.Z - p1.Z ):F4}");
+		//			Debug.WriteLine($"p2 = gp_Pnt({p2.X:F4},{p2.Y:F4},{p2.Z:F4})");
+		//			secondShapeExplorer.Next( );
+		//			// 检查两个顶点是否相等
+		//			if( p1.Equals(p2, LinearTolerance) ) {
+		//				log.Warn($"p1:{p1.X:F4},{p1.Y:F4},{p1.Z:F4}, p2:{p2.X:F4},{p2.Y:F4},{p2.Z:F4}");
+		//			}
+		//			// 如果相等，进行平移变换
+		//			var theTransformation = new Trsf(new Vec(p2,p1));
+		//			var myBrepTransformationShape = new Transform(secondShape, theTransformation).Shape();
+		//			secondShape = (TWire)myBrepTransformationShape;
+		//			isOk = true;
+		//			break;
+		//		}
+		//		if( isOk ) {
+		//			break;
+		//		}
+		//	}
+		//}
 		// 再次将两个边添加到一个新的线
 		var mkWireT = new MakeWire();
 		mkWireT.Add(firstShape);

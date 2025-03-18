@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using DevExpress.Charts.Native;
-using DevExpress.XtraRichEdit.Import.Doc;
+using IMKernel.Visualization;
 
 using IMKernelUI.Command;
-using IMKernel.Visualization;
+using IMKernelUI.Singleton;
 
 using log4net;
 
@@ -21,52 +13,45 @@ namespace PipeBendingUI.ViewModel;
 public partial class OCCViewViewModel:ObservableObject {
 	private static readonly ILog log = LogManager.GetLogger(typeof(OCCViewViewModel));
 
-	private static readonly PipeBendingUI.Singleton.CommandManager commandManager =
+	private static readonly CommandManager commandManager =
 		App.Current.CommandManager;
 	public readonly OCCCanvas OccCanvas;
 
 	public OCCViewViewModel( ) {
-		if( App.Current.ThreeDimensionContextManager.MainContext == null ) {
-			OccCanvas = new OCCCanvas(
-				App.Current.ThreeDimensionContextManager.CreateContext( ),
-				App.Current.CommandManager
-			);
-		} else {
-			OccCanvas = new OCCCanvas(
-				App.Current.ThreeDimensionContextManager.MainContext,
-				App.Current.CommandManager
-			);
-		}
+		this.OccCanvas = new OCCCanvas(
+			App.Current.ThreeDimensionContextManager.MainContext ?? App.Current.ThreeDimensionContextManager.CreateContext( ),
+			App.Current.CommandManager
+		);
 	}
 
 	public OCCViewViewModel( OCCCanvas canvas ) {
 		// 初始化 ViewModel 或需要的资源
-		OccCanvas = canvas;
+		this.OccCanvas = canvas;
 	}
 
 	private double _width;
 	public double Width {
-		get => _width;
+		get => this._width;
 		set {
-			_width = value;
+			this._width = value;
 			CalculatePopupSize( );
 		}
 	}
 
 	private double _height;
 	public double Height {
-		get => _height;
+		get => this._height;
 		set {
-			_height = value;
+			this._height = value;
 			CalculatePopupSize( );
 		}
 	}
 
 	private void CalculatePopupSize( ) {
-		PopupWidth = Width * 0.8;
-		PopupHeight = 80;
-		PopupHorizontalOffset = Width * 0;
-		PopupVerticalOffset = -Height * 0.45;
+		this.PopupWidth = this.Width * 0.8;
+		this.PopupHeight = 80;
+		this.PopupHorizontalOffset = this.Width * 0;
+		this.PopupVerticalOffset = -this.Height * 0.45;
 	}
 
 	[ObservableProperty]
@@ -82,26 +67,26 @@ public partial class OCCViewViewModel:ObservableObject {
 	private double popupVerticalOffset;
 
 	[RelayCommand]
-	private void FrontView( ) => commandManager.Execute(new FrontViewCommand( ), OccCanvas.View);
+	private void FrontView( ) => commandManager.Execute(new FrontViewCommand( ), this.OccCanvas.View);
 
 	[RelayCommand]
-	private void BackView( ) => commandManager.Execute(new BackViewCommand( ), OccCanvas.View);
+	private void BackView( ) => commandManager.Execute(new BackViewCommand( ), this.OccCanvas.View);
 
 	[RelayCommand]
-	private void TopView( ) => commandManager.Execute(new TopViewCommand( ), OccCanvas.View);
+	private void TopView( ) => commandManager.Execute(new TopViewCommand( ), this.OccCanvas.View);
 
 	[RelayCommand]
-	private void BottomView( ) => commandManager.Execute(new BottomViewCommand( ), OccCanvas.View);
+	private void BottomView( ) => commandManager.Execute(new BottomViewCommand( ), this.OccCanvas.View);
 
 	[RelayCommand]
-	private void LeftView( ) => commandManager.Execute(new LeftViewCommand( ), OccCanvas.View);
+	private void LeftView( ) => commandManager.Execute(new LeftViewCommand( ), this.OccCanvas.View);
 
 	[RelayCommand]
-	private void RightView( ) => commandManager.Execute(new RightViewCommand( ), OccCanvas.View);
+	private void RightView( ) => commandManager.Execute(new RightViewCommand( ), this.OccCanvas.View);
 
 	[RelayCommand]
-	private void AxoView( ) => commandManager.Execute(new AxoViewCommand( ), OccCanvas.View);
+	private void AxoView( ) => commandManager.Execute(new AxoViewCommand( ), this.OccCanvas.View);
 
 	[RelayCommand]
-	private void FitAll( ) => commandManager.Execute(new FitAllCommand( ), OccCanvas.View);
+	private void FitAll( ) => commandManager.Execute(new FitAllCommand( ), this.OccCanvas.View);
 }

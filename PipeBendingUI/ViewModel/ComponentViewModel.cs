@@ -23,12 +23,12 @@ public partial class ComponentViewModel:ObservableObject, IOCCFinilize {
 	private static readonly ILog log = LogManager.GetLogger(typeof(ComponentViewModel));
 	public ComponentViewModel( ) {
 		//value
-		Name = "新部件实例";
-		CreateComponentState = Visibility.Visible;
-		ChangingComponentState = Visibility.Collapsed;
-		Components = new( );
-		IsAddToWorkSpace = false;
-		ComponentVM = new( );
+		this.Name = "新部件实例";
+		this.CreateComponentState = Visibility.Visible;
+		this.ChangingComponentState = Visibility.Collapsed;
+		this.Components = new( );
+		this.IsAddToWorkSpace = false;
+		this.ComponentVM = new( );
 	}
 
 	#region OCC
@@ -36,7 +36,7 @@ public partial class ComponentViewModel:ObservableObject, IOCCFinilize {
 	//private OCCCanvas? canvas;
 
 	public void OCCFinilize( ) {
-		ComponentVM.OCCFinilize( );
+		this.ComponentVM.OCCFinilize( );
 	}
 
 	#endregion
@@ -48,12 +48,12 @@ public partial class ComponentViewModel:ObservableObject, IOCCFinilize {
 	/// </summary>
 	public ComponentInstance TheComponentInstance {
 		get {
-			return new(Name, ComponentVM.TheComponent);
+			return new(this.Name, this.ComponentVM.TheComponent);
 		}
 		set {
 			if( value != null ) {
-				ComponentVM.TheComponent = value.Component;
-				Name = value.Name;
+				this.ComponentVM.TheComponent = value.Component;
+				this.Name = value.Name;
 			}
 		}
 	}
@@ -78,7 +78,7 @@ public partial class ComponentViewModel:ObservableObject, IOCCFinilize {
 	/// </summary>
 	public bool IsComponentValid {
 		get {
-			if( ComponentVM.Name == "" || ComponentVM.Name == null ) {
+			if( this.ComponentVM.Name == "" || this.ComponentVM.Name == null ) {
 				return false;
 			}
 			return true;
@@ -101,7 +101,7 @@ public partial class ComponentViewModel:ObservableObject, IOCCFinilize {
 
 	[RelayCommand(CanExecute = nameof(IsComponentValid))]
 	private void CreateComponent( ) {
-		App.Current.CommandManager.Execute(new CreateComponentCommand( ), (ComponentVM.TheComponent, IsAddToWorkSpace));
+		App.Current.CommandManager.Execute(new CreateComponentCommand( ), (this.ComponentVM.TheComponent, this.IsAddToWorkSpace));
 	}
 
 	/// <summary>
@@ -112,13 +112,13 @@ public partial class ComponentViewModel:ObservableObject, IOCCFinilize {
 	[RelayCommand]
 	private void SaveComponent( ) {
 		//App.Current.CommandManager.Execute(new SaveComponentCommand(), component);
-		ComponentVM.OCCFinilize( );
+		this.ComponentVM.OCCFinilize( );
 	}
 
 	[RelayCommand]
 	private void CancelComponent( ) {
 		WeakReferenceMessenger.Default.Send(new PropertiesUIFinishedMessage( ));
-		ComponentVM.OCCFinilize( );
+		this.ComponentVM.OCCFinilize( );
 	}
 
 	#endregion

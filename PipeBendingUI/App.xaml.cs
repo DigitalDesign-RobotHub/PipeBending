@@ -4,6 +4,8 @@ using System.IO;
 using System.Threading;
 using System.Windows;
 
+using IMKernelUI.Singleton;
+
 using log4net;
 using log4net.Config;
 
@@ -43,8 +45,8 @@ public partial class App:Application {
 		);
 
 		// 定义你的应用程序专属缓存目录
-		AppCacheFolder = Path.Combine(appDataPath, "InsofRobot", "PipeBending", "Cache");
-		InsofRobotConfigFolder = Path.Combine(appDataPath, "InsofRobot", "Config");
+		this.AppCacheFolder = Path.Combine(appDataPath, "InsofRobot", "PipeBending", "Cache");
+		this.InsofRobotConfigFolder = Path.Combine(appDataPath, "InsofRobot", "Config");
 	}
 
 	#region 全局单例
@@ -104,14 +106,14 @@ public partial class App:Application {
 		#region 检查缓存目录
 
 		// 确保目录存在
-		if( !Directory.Exists(InsofRobotConfigFolder) ) {
-			Directory.CreateDirectory(InsofRobotConfigFolder);
-			log.Info($"创建 InsofRobot 配置文件目录：{InsofRobotConfigFolder}");
+		if( !Directory.Exists(this.InsofRobotConfigFolder) ) {
+			Directory.CreateDirectory(this.InsofRobotConfigFolder);
+			log.Info($"创建 InsofRobot 配置文件目录：{this.InsofRobotConfigFolder}");
 		}
 
-		if( !Directory.Exists(AppCacheFolder) ) {
-			Directory.CreateDirectory(AppCacheFolder);
-			log.Info($"创建缓存目录：{AppCacheFolder}");
+		if( !Directory.Exists(this.AppCacheFolder) ) {
+			Directory.CreateDirectory(this.AppCacheFolder);
+			log.Info($"创建缓存目录：{this.AppCacheFolder}");
 		}
 
 		#endregion
@@ -138,7 +140,7 @@ public partial class App:Application {
 		//// 默认显示启动页
 		//ShowStartupView();
 
-		ShutdownMode = ShutdownMode.OnMainWindowClose;
+		this.ShutdownMode = ShutdownMode.OnMainWindowClose;
 	}
 
 	/// <summary>
@@ -162,8 +164,8 @@ public partial class App:Application {
 	/// </summary>
 	private void OpenMainWindow( StartupResult? startupResult = null ) {
 		//todo 启动的逻辑
-		MainWindow = new MainWindow( );
-		MainWindow.Show( );
+		this.MainWindow = new MainWindow( );
+		this.MainWindow.Show( );
 	}
 
 	/*
@@ -175,7 +177,7 @@ public partial class App:Application {
 * to 4.0 TSE don't have workspace global name space and don't support the 'Global\'
 * prefix).
 */
-	void CreateInstanceMutexes( ) {
+	private void CreateInstanceMutexes( ) {
 		//const string mutexName = "MacadInstanceRunning";
 		///* By default on Windows NT, created mutexes are accessible only by the user
 		// * running the process. We need our mutexes to be accessible to all users, so
